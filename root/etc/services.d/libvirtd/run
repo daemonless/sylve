@@ -1,0 +1,10 @@
+#!/bin/sh
+# libvirtd -- Sylve connects to bhyve:///system via this daemon's socket.
+# Depends on virtlogd's socket existing first (no s6 dependency ordering
+# in plain s6 here, so wait for it directly).
+i=0
+while [ ! -S /var/run/libvirt/virtlogd-sock ]; do
+    i=$((i + 1))
+    [ "$i" -lt 30 ] && sleep 1 || break
+done
+exec /usr/local/sbin/libvirtd 2>&1

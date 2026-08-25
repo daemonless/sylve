@@ -1,0 +1,31 @@
+#!/bin/sh
+# jail-compat kldload shim (daemonless).
+#
+# FreeBSD jails cannot kldload even when the target module is already present
+# on the host -- PRIV_KLD is not jail-grantable, so `kldload <mod>` returns
+# EPERM. Sylve's checks (CheckVirtualization, EnableLinux, wireguard, ...)
+# exec kldload and treat a non-zero exit as fatal, which breaks first-boot
+# initialization for any jailed deployment even when the host has the module
+# loaded.
+#
+# This shim, installed in place of /sbin/kldload in the pkg image, reports
+# success when the requested module is already loaded on the host, and
+# otherwise falls through to the real kldload (correct behaviour for non-jail
+# use and for genuinely-missing modules -- a host that hasn't loaded the
+# module is a real misconfiguration the operator must fix).
+#
+# The match is filename-based (kldstat -v lists "<mod>.ko") rather than
+# `kldstat -m <name>`, because some modules register under a different
+# internal name than their file (e.g. linux.ko registers as "linuxelf"),
+# which an -m lookup would miss.
+
+mod=
+for a in "$@"; do
+	mod="$a"
+done
+
+if [ -n "$mod" ] && /sbin/kldstat -v 2>/dev/null | grep -q "${mod}\.ko"; then
+	exit 0
+fi
+
+exec /sbin/kldload.real "$@"

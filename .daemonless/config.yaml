@@ -1,0 +1,27 @@
+# dbuild configuration file
+# Full reference: https://github.com/daemonless/dbuild
+
+build:
+  architectures:
+    - amd64
+  variants:
+    # Both tracks fetch Sylve's prebuilt per-arch FreeBSD binary from a GitHub
+    # release (same asset set, different tag).
+    - tag: latest
+      containerfile: Containerfile
+      default: true
+      args:
+        SYLVE_RELEASE: "v0.3.0"
+      tag_desc: "Latest tagged release of Sylve (AlchemillaHQ/Sylve)."
+    - tag: nightly
+      containerfile: Containerfile
+      args:
+        SYLVE_RELEASE: "tip"
+      tag_desc: "Rolling build from upstream's `tip` release (AlchemillaHQ/Sylve)."
+
+cit:
+  mode: health
+  port: 8181
+  health: /
+  ready: "Sylve"
+  puid: false

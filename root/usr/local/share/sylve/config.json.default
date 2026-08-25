@@ -1,0 +1,28 @@
+{
+    "environment": "production",
+    "proxyToVite": false,
+    "auth": {
+        "enablePAM": false
+    },
+    "admin": {
+        "email": "admin@sylve.local",
+        "password": "admin"
+    },
+    "logLevel": 0,
+    "port": 8181,
+    "httpPort": 8182,
+    "raft": {
+        "reset": false
+    },
+    "btt": {
+        "rpc": {
+            "enabled": false,
+            "host": "127.0.0.1",
+            "port": 6890
+        },
+        "dht": {
+            "enabled": false,
+            "port": 7246
+        }
+    }
+}

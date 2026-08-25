@@ -1,0 +1,3 @@
+#!/bin/sh
+# virtlogd -- required by libvirtd for VM log handling
+exec /usr/local/sbin/virtlogd 2>&1

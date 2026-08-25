@@ -1,0 +1,7 @@
+#!/bin/sh
+# Seed /var/db/sylve/config.json (persistent volume) from the packaged
+# default on first boot only -- never overwrite an existing config, since
+# that's where the admin password gets changed after first login.
+if [ ! -f /var/db/sylve/config.json ]; then
+    cp /usr/local/share/sylve/config.json.default /var/db/sylve/config.json
+fi

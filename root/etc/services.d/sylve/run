@@ -1,0 +1,4 @@
+#!/bin/sh
+# Sylve service runner
+export HOME=/var/db/sylve
+exec /usr/local/sbin/sylve -config /var/db/sylve/config.json 2>&1

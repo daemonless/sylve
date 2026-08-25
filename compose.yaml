@@ -1,0 +1,62 @@
+name: sylve
+
+x-daemonless:
+  title: "Sylve"
+  icon: ":simple-freebsd:"
+  category: "Infrastructure"
+  description: "Modern, open-source management platform for FreeBSD managing Virtual Machines (Bhyve), Jails, and ZFS storage."
+  upstream_url: "https://github.com/AlchemillaHQ/Sylve"
+  web_url: "https://sylve.io"
+  freshports_url: "https://www.freshports.org/sysutils/sylve/"
+  user: "root"
+  mlock: false
+  community: "Discord:https://chat.sylve.io"
+
+  docs:
+    manual: true
+    env:
+      SYLVE_HOSTNAME: "Hostname/FQDN you reach Sylve at (node-identity check)"
+      SYLVE_DATASET: "ZFS dataset delegated to Sylve (must match host-setup)"
+      SYLVE_DATA_LOCATION: "Host path where Sylve stores its data"
+      TZ: "Timezone for the container"
+    volumes:
+      /var/db/sylve: "Sylve database and runtime configuration"
+    ports:
+      8181: "Web Interface (HTTPS)"
+
+services:
+  sylve:
+    image: ghcr.io/daemonless/sylve:nightly
+    container_name: sylve
+    hostname: ${SYLVE_HOSTNAME}
+    restart: always
+
+    annotations:
+      org.freebsd.jail.name: "sylve"
+      org.freebsd.jail.devfs_ruleset: "10"
+      io.daemonless.sylve.autowire: "true"
+      io.daemonless.sylve.dataset: "${SYLVE_DATASET}"
+      org.freebsd.jail.allow.vmm: "true"
+      org.freebsd.jail.allow.mount: "true"
+      org.freebsd.jail.allow.mount.zfs: "true"
+      org.freebsd.jail.allow.mount.fdescfs: "true"
+      org.freebsd.jail.allow.nfsd: "true"
+      org.freebsd.jail.children.max: "100"
+      org.freebsd.jail.enforce_statfs: "1"
+      org.freebsd.jail.allow.raw_sockets: "true"
+      org.freebsd.jail.allow.chflags: "true"
+      org.freebsd.jail.allow.mount.linprocfs: "true"
+      org.freebsd.jail.allow.mount.linsysfs: "true"
+      org.freebsd.jail.allow.mount.tmpfs: "true"
+      org.freebsd.jail.allow.mount.devfs: "true"
+      org.freebsd.jail.allow.unprivileged_proc_debug: "true"
+
+    env_file:
+      - .env
+
+    volumes:
+      - ${SYLVE_DATA_LOCATION}:/var/db/sylve
+
+    ports:
+      - "8181:8181"
+
