@@ -24,7 +24,6 @@ LABEL org.opencontainers.image.title="Sylve" \
       org.opencontainers.image.vendor="daemonless" \
       org.opencontainers.image.authors="daemonless" \
       io.daemonless.category="Infrastructure" \
-      io.daemonless.port="8181" \
       io.daemonless.volumes="/var/db/sylve" \
       io.daemonless.arch="${FREEBSD_ARCH}" \
       io.daemonless.pkg-source="github" \
@@ -81,7 +80,6 @@ RUN chmod +x /etc/services.d/*/run /etc/cont-init.d/* /usr/local/share/sylve/hos
 ENTRYPOINT ["/usr/local/share/sylve/host/sylve-entrypoint.sh"]
 
 # --- Expose (Injected by Generator) ---
-EXPOSE 8181
 
 # --- Volumes (Injected by Generator) ---
 VOLUME /var/db/sylve

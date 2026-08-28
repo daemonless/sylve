@@ -12,6 +12,45 @@ x-daemonless:
   mlock: false
   community: "Discord:https://chat.sylve.io"
 
+  appjail:
+    director:
+      options:
+        - alias:
+        - ip4_inherit:
+      services:
+        sylve:
+          name: sylve
+          options:
+            - from: ghcr.io/daemonless/sylve:nightly
+            - template: "!ENV '${PWD}/sylve-template.conf'"
+            - device: 'include $devfsrules_hide_all'
+            - device: 'include $devfsrules_unhide_basic'
+            - device: 'include $devfsrules_unhide_login'
+            - device: 'include $devfsrules_jail'
+            - device: 'include $devfsrules_jail_vnet'
+            - device: 'path zfs unhide'
+            - device: 'path shm unhide'
+            - device: 'path pf unhide'
+            - device: 'path pflog unhide'
+            - device: "path 'bpf\\*' unhide"
+            - device: 'path vmm unhide'
+            - device: "path 'vmm/\\*' unhide"
+            - device: 'path vmm.io unhide'
+            - device: "path 'vmm.io/\\*' unhide"
+            - device: 'path vmmctl unhide'
+            - device: "path 'nmdm\\*' unhide"
+            - device: "path 'tap\\*' unhide"
+            - device: 'path cam unhide'
+            - device: "path 'cam/ctl' unhide"
+            - device: "path 'da\\*' unhide"
+            - device: "path 'ada\\*' unhide"
+            - device: "path 'nda\\*' unhide"
+          volumes:
+            - sylve-data: /var/db/sylve
+      volumes:
+        sylve-data:
+          device: "!ENV '${SYLVE_DATA_LOCATION}'"
+
   docs:
     manual: true
     env:
@@ -30,6 +69,7 @@ services:
     container_name: sylve
     hostname: ${SYLVE_HOSTNAME}
     restart: always
+    network_mode: host
 
     annotations:
       org.freebsd.jail.name: "sylve"
@@ -45,6 +85,7 @@ services:
       org.freebsd.jail.enforce_statfs: "1"
       org.freebsd.jail.allow.raw_sockets: "true"
       org.freebsd.jail.allow.chflags: "true"
+      org.freebsd.jail.allow.routing: "true"
       org.freebsd.jail.allow.mount.linprocfs: "true"
       org.freebsd.jail.allow.mount.linsysfs: "true"
       org.freebsd.jail.allow.mount.tmpfs: "true"
@@ -56,7 +97,4 @@ services:
 
     volumes:
       - ${SYLVE_DATA_LOCATION}:/var/db/sylve
-
-    ports:
-      - "8181:8181"
 

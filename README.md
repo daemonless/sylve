@@ -5,6 +5,9 @@
 
 Modern, open-source management platform for FreeBSD managing Virtual Machines (Bhyve), Jails, and ZFS storage.
 
+!!! tip "What is Sylve?"
+    Sylve is a modern, open-source management platform for FreeBSD: Bhyve VMs, jails, ZFS, and networking behind one web UI. It manages the host *from inside its own jail*, so it needs host access a normal container never gets -- kernel modules, devfs entries like `/dev/pf` and `/dev/vmm`, ZFS delegation, and `allow.vmm`. Both deploy methods below wire that up for you.
+
 ## Version Tags
 
 Both tags ship Sylve's prebuilt native-FreeBSD binary from a GitHub release; they differ only in which release they track.
@@ -14,67 +17,189 @@ Both tags ship Sylve's prebuilt native-FreeBSD binary from a GitHub release; the
 | `latest` | The latest tagged release ([AlchemillaHQ/Sylve](https://github.com/AlchemillaHQ/Sylve)). | Most deployments. |
 | `nightly` | The rolling `tip` release, tracking upstream `master`. | Early access to unreleased fixes. |
 
-## Why Sylve is different
+## Prerequisites
 
-Sylve *manages* the host's Bhyve VMs, jails, and ZFS -- from inside its own jail. That needs host-level access a normal container doesn't get: kernel modules the jail can't load, a devfs ruleset exposing `/dev/pf`, `/dev/vmm`, and `/dev/cam/ctl`, ZFS delegation (`zfs jail`), and `allow.vmm`. `ocijail` can't express all of that through annotations, so this image ships:
+**Requirements:**
 
-- a one-time **`host-setup`** script (kernel modules, devfs ruleset, ZFS dataset), and
-- an **OCI `createRuntime` hook** that delegates the ZFS pool and sets jail params on every start.
-
-> There is **no AppJail deployment** -- the mechanism relies on Podman's OCI hooks, which AppJail doesn't have. Deploy it with Podman Compose as below.
-
-## Requirements
-
-- FreeBSD 15+ with `podman`, `ocijail`, and `podman-compose`
-- A ZFS pool (`host-setup` creates a `sylve` dataset inside it)
-- `root`
+- FreeBSD 15+ and `root`
+- A ZFS pool (a `sylve` dataset gets delegated to the jail)
+- AppJail path: `appjail`, `sysutils/py-director` -- Podman path: `podman`, `ocijail`, `podman-compose`
 
 ## Deploy
 
-### 1. Prepare the host (one time)
+!!! warning "Experimental"
+    Both the Podman and AppJail deployments of Sylve are experimental on our end.
 
-Generate the setup script, review it, then run it. It confirms each step (`-y` to skip the prompts) and skips anything already configured.
+=== ":appjail-appjail: AppJail Director"
 
-```bash
-podman run --rm ghcr.io/daemonless/sylve:latest host-setup > sylve-setup.sh
-less sylve-setup.sh          # review exactly what it will change
-sh sylve-setup.sh            # or: sh sylve-setup.sh -y
-```
+    **1.** Prepare the host (one time). Kernel modules go in `kld_list`; only the boot-only `kern.racct` tunable touches `loader.conf` (warnings from `service kld start` about modules already built into the kernel are harmless):
 
-It loads the kernel modules, adds a devfs ruleset, creates the ZFS dataset, and installs the OCI hook. If it reports that `kern.racct` needs a reboot, reboot before continuing (Sylve requires it).
+    ```bash
+    pkg install -y appjail sysutils/py-director
+    sysrc kld_list+="vmm if_bridge cryptodev if_epair nullfs netlink nlsysevent nmdm pf pflog if_wg linux linux64 pty linprocfs linsysfs ctl"
+    service kld start
+    [ "$(sysctl -n kern.racct.enable)" = "1" ] || echo 'kern.racct.enable="1"' >> /boot/loader.conf
+    # reboot if `sysctl -n kern.racct.enable` is still 0 (Sylve requires racct)
+    zfs create zroot/sylve && zfs set jailed=on zroot/sylve
+    sysrc appjail_enable=YES
+    ```
 
-### 2. Create the deployment files
+    **2.** Save as `.env`:
 
-`init` writes `compose.yaml` and `.env` into the current directory (it refuses to overwrite existing files without `--force`):
+    ``` { data-zip-bundle="sylve-appjail" data-zip-filename=".env" }
+    # Host path for Sylve's data
+    SYLVE_DATA_LOCATION=/var/appjail-volumes/sylve/data
+    DIRECTOR_PROJECT=sylve
+    ```
 
-```bash
-podman run --rm -v "$PWD:/out" ghcr.io/daemonless/sylve:latest init
-```
+    **3.** Save as `appjail-director.yml`:
 
-Edit `.env`:
+    ```yaml { data-zip-bundle="sylve-appjail" data-zip-filename="appjail-director.yml" }
+    options:
+      # Equivalent to 'network_mode: host'
+      - alias:
+      - ip4_inherit:
+    services:
+      sylve:
+        name: sylve
+        options:
+          - from: ghcr.io/daemonless/sylve:nightly
+          - template: !ENV '${PWD}/sylve-template.conf'
+          - device: 'include $devfsrules_hide_all'
+          - device: 'include $devfsrules_unhide_basic'
+          - device: 'include $devfsrules_unhide_login'
+          - device: 'include $devfsrules_jail'
+          - device: 'include $devfsrules_jail_vnet'
+          - device: 'path zfs unhide'
+          - device: 'path shm unhide'
+          - device: 'path pf unhide'
+          - device: 'path pflog unhide'
+          - device: "path 'bpf\\*' unhide"
+          - device: 'path vmm unhide'
+          - device: "path 'vmm/\\*' unhide"
+          - device: 'path vmm.io unhide'
+          - device: "path 'vmm.io/\\*' unhide"
+          - device: 'path vmmctl unhide'
+          - device: "path 'nmdm\\*' unhide"
+          - device: "path 'tap\\*' unhide"
+          - device: 'path cam unhide'
+          - device: "path 'cam/ctl' unhide"
+          - device: "path 'da\\*' unhide"
+          - device: "path 'ada\\*' unhide"
+          - device: "path 'nda\\*' unhide"
+        volumes:
+          - sylve-data: /var/db/sylve
+    volumes:
+      sylve-data:
+        device: !ENV '${SYLVE_DATA_LOCATION}'
+    ```
 
-| Variable | Set to |
-| :--- | :--- |
-| `SYLVE_HOSTNAME` | The hostname/FQDN you reach Sylve at -- **must match** (node-identity check). |
-| `SYLVE_DATA_LOCATION` | Host path for Sylve's data. |
-| `SYLVE_DATASET` | ZFS dataset to delegate (the one `host-setup` created). |
+    **4.** Save as `sylve-template.conf`:
 
-### 3. Start
+    ``` { data-zip-bundle="sylve-appjail" data-zip-filename="sylve-template.conf" }
+    exec.start: "/bin/sh /etc/rc"
+    exec.stop: "/bin/sh /etc/rc.shutdown jail"
+    mount.devfs
+    persist
+    # EDIT: the jail's hostname
+    host.hostname: sylve.example.org
+    allow.vmm
+    allow.chflags
+    allow.raw_sockets
+    allow.routing
+    allow.nfsd
+    allow.unprivileged_proc_debug
+    enforce_statfs: 1
+    allow.mount
+    allow.mount.devfs
+    allow.mount.fdescfs
+    allow.mount.linprocfs
+    allow.mount.linsysfs
+    allow.mount.tmpfs
+    allow.mount.zfs
+    # EDIT: the ZFS dataset created during host prep
+    zfs.dataset: zroot/sylve
+    children.max: 100
+    allow.socket_af
+    allow.sysvipc
+    allow.reserved_ports
+    allow.set_hostname
+    allow.suser
+    ```
 
-```bash
-mkdir -p "$SYLVE_DATA_LOCATION"   # FreeBSD won't auto-create a bind-mount source
-podman compose up -d
-```
+    **5.** Save as `Makejail`:
 
-Sylve is then reachable at `https://<SYLVE_HOSTNAME>:8181`.
+    ``` { data-zip-bundle="sylve-appjail" data-zip-filename="Makejail" }
+    OPTION container=boot args:--pull
+    OPTION overwrite=force
+    ```
 
-## Notes
+    **6.** Create the data directory and deploy:
 
-**Hostname must match.** Sylve's `EnsureCorrectHost` check compares its configured hostname against what you reach it at; a mismatch fails requests with `selected_node_not_found`.
+    ```bash
+    mkdir -p /var/appjail-volumes/sylve/data
+    appjail-director up
+    ```
 
-**Never bind-mount `/dev` (`-v /dev:/dev`).** A nullfs `/dev` makes Bhyve guest-memory `mmap` fail with `ENXIO` (`Unable to setup memory (6)`) -- VM creation succeeds but the guest never boots. The hook mounts a real devfs via the ruleset; don't override it.
+=== ":material-tune: Podman Compose"
 
-**Undo.** `sh sylve-setup.sh --undo` removes Sylve's hook and devfs ruleset. It never touches your ZFS dataset (it prints the `zfs destroy` command if you want it gone).
+    **1.** Prepare the host (one time). Generate the setup script, review it, then run it -- it loads the kernel modules, adds a devfs ruleset, creates the ZFS dataset, and installs the OCI `createRuntime` hook (`ocijail` can't express devfs rulesets or ZFS delegation through annotations). Each step asks before running; already-configured steps are skipped:
+
+    ```bash
+    podman run --rm ghcr.io/daemonless/sylve:latest host-setup > sylve-setup.sh
+    less sylve-setup.sh          # review exactly what it will change
+    sh sylve-setup.sh            # or: sh sylve-setup.sh -y
+    ```
+
+    If it reports that `kern.racct` needs a reboot, reboot before continuing (Sylve requires it).
+
+    **2.** Create the deployment files. `init` writes `compose.yaml` and `.env` into the current directory (it refuses to overwrite existing files without `--force`):
+
+    ```bash
+    podman run --rm -v "$PWD:/out" ghcr.io/daemonless/sylve:latest init
+    vi .env
+    ```
+
+    **3.** Start:
+
+    ```bash
+    mkdir -p "$SYLVE_DATA_LOCATION"   # FreeBSD won't auto-create a bind-mount source
+    podman compose up -d
+    ```
+
+Access Sylve at: **https://your-host:8181** (first login: `admin` / `admin`)
+
+## Environment Variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `SYLVE_HOSTNAME` | -- | The jail's hostname. AppJail: `host.hostname` in `sylve-template.conf`. |
+| `SYLVE_DATA_LOCATION` | -- | Host path for Sylve's data (`/var/db/sylve` in the jail). |
+| `SYLVE_DATASET` | `zroot/sylve` | ZFS dataset delegated to Sylve. AppJail: `zfs.dataset` in `sylve-template.conf`. |
+| `TZ` | System default | Timezone. |
+
+## Ports
+
+| Port | Service | Description |
+|------|---------|-------------|
+| `8181` | sylve | Web UI (HTTPS) |
+
+!!! note "Network Mode"
+    Sylve shares the host network (`network_mode: host` / `ip4_inherit`) -- it manages the host's interfaces, firewall, and VMs, so an isolated network namespace would defeat the point.
+
+## FreeBSD-Specific Notes
+
+### `selected_node_not_found`
+
+If requests fail with `selected_node_not_found`, Sylve's `EnsureCorrectHost` check is comparing its configured hostname against the one you're browsing to -- set the jail's hostname to the name you reach it at.
+
+### Never bind-mount `/dev`
+
+A nullfs `/dev` (`-v /dev:/dev`) makes Bhyve guest-memory `mmap` fail with `ENXIO` (`Unable to setup memory (6)`) -- VM creation succeeds but the guest never boots. Both deploy methods mount a real devfs via a ruleset; don't override it.
+
+### Undo (Podman host-setup)
+
+`sh sylve-setup.sh --undo` removes Sylve's OCI hook and devfs ruleset. It never touches your ZFS dataset (it prints the `zfs destroy` command if you want it gone).
 
 ---
 
