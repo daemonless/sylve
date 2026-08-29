@@ -10,69 +10,7 @@ x-daemonless:
   freshports_url: "https://www.freshports.org/sysutils/sylve/"
   user: "root"
   mlock: false
-  community: "Discord:https://chat.sylve.io"
-
-  appjail:
-    director:
-      options:
-        - alias:
-        - ip4_inherit:
-      services:
-        sylve:
-          name: sylve
-          options:
-            - from: ghcr.io/daemonless/sylve:nightly
-            - template: "!ENV '${PWD}/sylve-template.conf'"
-            - label: 'load-kld:1'
-            - label: 'load-kld.load-vmm:vmm'
-            - label: 'load-kld.load-if-bridge:if_bridge'
-            - label: 'load-kld.load-cryptodev:cryptodev'
-            - label: 'load-kld.load-if-epair:if_epair'
-            - label: 'load-kld.load-nullfs:nullfs'
-            - label: 'load-kld.load-netlink:netlink'
-            - label: 'load-kld.load-nlsysevent:nlsysevent'
-            - label: 'load-kld.load-nmdm:nmdm'
-            - label: 'load-kld.load-pf:pf'
-            - label: 'load-kld.load-pflog:pflog'
-            - label: 'load-kld.load-if-wg:if_wg'
-            - label: 'load-kld.load-linux:linux'
-            - label: 'load-kld.load-linux.module:linuxelf'
-            - label: 'load-kld.load-linux64:linux64'
-            - label: 'load-kld.load-linux64.module:linux64elf'
-            - label: 'load-kld.load-pty:pty'
-            - label: 'load-kld.load-linprocfs:linprocfs'
-            - label: 'load-kld.load-linsysfs:linsysfs'
-            - label: 'load-kld.load-ctl:ctl'
-            - device: 'include $devfsrules_hide_all'
-            - device: 'include $devfsrules_unhide_basic'
-            - device: 'include $devfsrules_unhide_login'
-            - device: 'include $devfsrules_jail'
-            - device: 'include $devfsrules_jail_vnet'
-            - device: 'path zfs unhide'
-            - device: 'path shm unhide'
-            - device: 'path pf unhide'
-            - device: 'path pflog unhide'
-            - device: "path 'bpf\\*' unhide"
-            - device: 'path vmm unhide'
-            - device: "path 'vmm/\\*' unhide"
-            - device: 'path vmm.io unhide'
-            - device: "path 'vmm.io/\\*' unhide"
-            - device: 'path vmmctl unhide'
-            - device: "path 'nmdm\\*' unhide"
-            - device: "path 'tap\\*' unhide"
-            - device: 'path cam unhide'
-            - device: "path 'cam/ctl' unhide"
-            - device: "path 'da\\*' unhide"
-            - device: "path 'ada\\*' unhide"
-            - device: "path 'nda\\*' unhide"
-            - device: "path 'pass\\*' unhide"
-            - device: "path 'xpt\\*' unhide"
-            - device: "path 'nvme\\*' unhide"
-          volumes:
-            - sylve-data: /var/db/sylve
-      volumes:
-        sylve-data:
-          device: "!ENV '${SYLVE_DATA_LOCATION}'"
+  community: "Discord:https://discord.gg/Kb9tkhecZT"
 
   docs:
     manual: true

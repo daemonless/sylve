@@ -32,8 +32,23 @@ Both tags ship Sylve's prebuilt native-FreeBSD binary from a GitHub release; the
 
 === ":appjail-appjail: AppJail Director"
 
-    !!! warning "AppJail 5.4+ required"
-        **AppJail 5.4 or newer** is needed for the kernel-module handling (`load-kld` labels) this deployment relies on.
+    !!! warning "`load-kld` hook is required"
+        [load-kld](https://github.com/DtxdF/AppJail/blob/main/share/examples/appjail/hooks/pre.d/load-kld.sh) hook is required for the kernel-module handling this deployment relies on.
+
+        1. Be sure to set `HOOKSDIR` in your `appjail.conf(5)` file.
+           ```console
+           $ grep '^HOOKSDIR' /usr/local/etc/appjail/appjail.conf
+           HOOKSDIR=/usr/local/etc/appjail/hooks
+           ```
+        2. Create the hooks directory if it does not exist.
+           ```console
+           $ mkdir -p /usr/local/etc/appjail/hooks/pre.d/
+           ```
+        3. Install the `load-kld` hook and set the execute bit.
+           ```console
+           $ fetch -o /usr/local/etc/appjail/hooks/pre.d/load-kld.sh https://github.com/DtxdF/AppJail/blob/main/share/examples/appjail/hooks/pre.d/load-kld.sh
+           $ chmod +x /usr/local/etc/appjail/hooks/pre.d/load-kld.sh
+           ```
 
     **1.** Prepare the host (one time). Kernel modules are loaded automatically at jail start via `load-kld` labels; only the boot-only `kern.racct` tunable touches `loader.conf`:
 
@@ -41,11 +56,7 @@ Both tags ship Sylve's prebuilt native-FreeBSD binary from a GitHub release; the
     pkg install -y appjail sysutils/py-director
     [ "$(sysctl -n kern.racct.enable)" = "1" ] || echo 'kern.racct.enable="1"' >> /boot/loader.conf
     # reboot if `sysctl -n kern.racct.enable` is still 0 (Sylve requires racct)
-    zfs create zroot/sylve && zfs set jailed=on zroot/sylve
     sysrc appjail_enable=YES
-    # AppJail 5.3 and older only (no load-kld): load the modules yourself:
-    # sysrc kld_list+="vmm if_bridge cryptodev if_epair nullfs netlink nlsysevent nmdm pf pflog if_wg linux linux64 pty linprocfs linsysfs ctl"
-    # service kld start
     ```
 
     **2.** Save as `.env`:
@@ -60,18 +71,24 @@ Both tags ship Sylve's prebuilt native-FreeBSD binary from a GitHub release; the
 
     ```yaml { data-zip-bundle="sylve-appjail" data-zip-filename="appjail-director.yml" }
     options:
-      # Equivalent to 'network_mode: host'
-      - alias:
-      - ip4_inherit:
+      # Equivalent to 'network_host: host'.
+      # Use it only if you don't have problems with Sylve managing your pf(4).
+      #- alias:
+      #- ip4_inherit:
+      #
+      # The jail will use its own network stack without touching with the host's;
+      # in addition, AppJail will configure an IPv4 address that you can use to
+      # communicate with Sylve via the jail's IPv4 address or hostname (if you
+      # have enabled DNS in AppJail).
+      - virtualnet: ':<random> default'
+      - nat:
     services:
       sylve:
         name: sylve
         options:
           - from: ghcr.io/daemonless/sylve:nightly
           - template: !ENV '${PWD}/sylve-template.conf'
-          # load-kld hook (AppJail > 5.4.0): loads the kernel modules before
-          # the jail starts, replacing the kld_list host-prep step. Inert on
-          # older AppJail releases -- keep the kld_list line there.
+          - container: 'args:--pull'
           - label: 'load-kld:1'
           - label: 'load-kld.load-vmm:vmm'
           - label: 'load-kld.load-if-bridge:if_bridge'
@@ -92,31 +109,44 @@ Both tags ship Sylve's prebuilt native-FreeBSD binary from a GitHub release; the
           - label: 'load-kld.load-linprocfs:linprocfs'
           - label: 'load-kld.load-linsysfs:linsysfs'
           - label: 'load-kld.load-ctl:ctl'
+          - label: 'load-kld.load-iscsi:iscsi'
           - device: 'include $devfsrules_hide_all'
           - device: 'include $devfsrules_unhide_basic'
           - device: 'include $devfsrules_unhide_login'
           - device: 'include $devfsrules_jail'
           - device: 'include $devfsrules_jail_vnet'
           - device: 'path zfs unhide'
+          - device: 'path zvol unhide'
+          - device: "path 'zvol/*' unhide"
+          - device: "path 'zvol/*/*' unhide"
+          - device: "path 'zvol/*/*/*' unhide"
+          - device: "path 'zvol/*/*/*/*' unhide"
+          - device: "path 'zvol/*/*/*/*/*' unhide"
           - device: 'path shm unhide'
           - device: 'path pf unhide'
           - device: 'path pflog unhide'
-          - device: "path 'bpf\\*' unhide"
+          - device: 'path bpf unhide'
+          - device: "path 'bpf*' unhide"
           - device: 'path vmm unhide'
-          - device: "path 'vmm/\\*' unhide"
+          - device: "path 'vmm/*' unhide"
           - device: 'path vmm.io unhide'
-          - device: "path 'vmm.io/\\*' unhide"
+          - device: "path 'vmm.io/*' unhide"
           - device: 'path vmmctl unhide'
-          - device: "path 'nmdm\\*' unhide"
-          - device: "path 'tap\\*' unhide"
+          - device: "path 'nmdm*' unhide"
+          - device: "path 'tap*' unhide"
+          - device: 'path mem unhide'
+          - device: 'path kmem unhide'
+          - device: 'path pci unhide'
+          - device: 'path io unhide'
           - device: 'path cam unhide'
           - device: "path 'cam/ctl' unhide"
-          - device: "path 'da\\*' unhide"
-          - device: "path 'ada\\*' unhide"
-          - device: "path 'nda\\*' unhide"
-          - device: "path 'pass\\*' unhide"
-          - device: "path 'xpt\\*' unhide"
-          - device: "path 'nvme\\*' unhide"
+          - device: "path 'da*' unhide"
+          - device: "path 'ada*' unhide"
+          - device: "path 'nda*' unhide"
+          - device: "path 'pass*' unhide"
+          - device: "path 'xpt*' unhide"
+          - device: "path 'nvme*' unhide"
+          - device: 'path iscsi unhide'
         volumes:
           - sylve-data: /var/db/sylve
     volumes:
@@ -127,13 +157,18 @@ Both tags ship Sylve's prebuilt native-FreeBSD binary from a GitHub release; the
     **4.** Save as `sylve-template.conf`:
 
     ``` { data-zip-bundle="sylve-appjail" data-zip-filename="sylve-template.conf" }
+    # EDIT: the ZFS dataset created during host prep
+    ${dataset}: zroot/sylve
+    # Number of child jails allowed to be created by this jail.
+    ${children_max}: 100
+
     exec.start: "/bin/sh /etc/rc"
     exec.stop: "/bin/sh /etc/rc.shutdown jail"
     mount.devfs
     persist
-    # EDIT: the jail's hostname
-    host.hostname: sylve.example.org
     allow.vmm
+    allow.vmm_ppt
+    stop.timeout: 30
     allow.chflags
     allow.raw_sockets
     allow.routing
@@ -147,28 +182,30 @@ Both tags ship Sylve's prebuilt native-FreeBSD binary from a GitHub release; the
     allow.mount.linsysfs
     allow.mount.tmpfs
     allow.mount.zfs
-    # EDIT: the ZFS dataset created during host prep
-    zfs.dataset: zroot/sylve
-    zfs.mount_snapshot: 1
-    children.max: 100
+    zfs.mount_snapshot
+    children.max: ${children_max}
     allow.socket_af
     allow.sysvipc
     allow.reserved_ports
     allow.set_hostname
     allow.suser
+    exec.created+: "zfs create -p -o jailed=on ${dataset}"
+    exec.created+: "zfs jail ${name} ${dataset}"
+    exec.created+: "jexec -l ${name} zfs list -t fs -Hro name ${dataset} | xargs -L 1 jexec -l ${name} zfs mount"
+    exec.prestop+: "jexec -l ${name} zfs list -t fs -Hro name ${dataset} | tail -r | xargs -L 1 jexec -l ${name} zfs umount"
+    exec.clean
     ```
 
     **5.** Save as `Makejail`:
 
     ``` { data-zip-bundle="sylve-appjail" data-zip-filename="Makejail" }
-    OPTION container=boot args:--pull
+    OPTION container=boot
     OPTION overwrite=force
     ```
 
     **6.** Create the data directory and deploy:
 
     ```bash
-    mkdir -p /var/appjail-volumes/sylve/data
     appjail-director up
     ```
 
@@ -204,9 +241,9 @@ Access Sylve at: **https://your-host:8181** (first login: `admin` / `admin`)
 
 | Variable | Default | Description |
 |----------|---------|-------------|
-| `SYLVE_HOSTNAME` | -- | The jail's hostname. AppJail: `host.hostname` in `sylve-template.conf`. |
+| `SYLVE_HOSTNAME` | -- | The jail's hostname (node-identity check). Podman: `hostname:` in `compose.yaml`. |
 | `SYLVE_DATA_LOCATION` | -- | Host path for Sylve's data (`/var/db/sylve` in the jail). |
-| `SYLVE_DATASET` | `zroot/sylve` | ZFS dataset delegated to Sylve. AppJail: `zfs.dataset` in `sylve-template.conf`. |
+| `SYLVE_DATASET` | `zroot/sylve` | ZFS dataset delegated to Sylve. AppJail: `${dataset}` in `sylve-template.conf`. |
 | `TZ` | System default | Timezone. |
 
 ## Ports
@@ -216,7 +253,7 @@ Access Sylve at: **https://your-host:8181** (first login: `admin` / `admin`)
 | `8181` | sylve | Web UI (HTTPS) |
 
 !!! note "Network Mode"
-    Sylve shares the host network (`network_mode: host` / `ip4_inherit`) -- it manages the host's interfaces, firewall, and VMs, so an isolated network namespace would defeat the point.
+    The Podman path shares the host network (`network_mode: host`) so Sylve manages the host's interfaces, firewall, and VMs directly. The AppJail path defaults to its own vnet + NAT to avoid clobbering the host's `pf(4)` rules -- uncomment `alias`/`ip4_inherit` in `appjail-director.yml` for host networking instead.
 
 ## FreeBSD-Specific Notes
 
