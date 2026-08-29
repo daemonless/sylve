@@ -29,7 +29,7 @@ Both tags ship Sylve's prebuilt native-FreeBSD binary from a GitHub release; the
 
 - FreeBSD 15+ and `root`
 - A ZFS pool (a `sylve` dataset gets delegated to the jail)
-- AppJail path: `appjail`, `sysutils/py-director` -- Podman path: `podman`, `ocijail`, `podman-compose`
+- AppJail path: `appjail` **5.4+**, `sysutils/py-director` -- Podman path: `podman`, `ocijail`, `podman-compose`
 
 ## Deploy
 
@@ -38,16 +38,20 @@ Both tags ship Sylve's prebuilt native-FreeBSD binary from a GitHub release; the
 
 === ":appjail-appjail: AppJail Director"
 
-    **1.** Prepare the host (one time). Kernel modules go in `kld_list`; only the boot-only `kern.racct` tunable touches `loader.conf` (warnings from `service kld start` about modules already built into the kernel are harmless):
+    !!! warning "AppJail 5.4+ required"
+        **AppJail 5.4 or newer** is needed for the kernel-module handling (`load-kld` labels) this deployment relies on.
+
+    **1.** Prepare the host (one time). Kernel modules are loaded automatically at jail start via `load-kld` labels; only the boot-only `kern.racct` tunable touches `loader.conf`:
 
     ```bash
     pkg install -y appjail sysutils/py-director
-    sysrc kld_list+="vmm if_bridge cryptodev if_epair nullfs netlink nlsysevent nmdm pf pflog if_wg linux linux64 pty linprocfs linsysfs ctl"
-    service kld start
     [ "$(sysctl -n kern.racct.enable)" = "1" ] || echo 'kern.racct.enable="1"' >> /boot/loader.conf
     # reboot if `sysctl -n kern.racct.enable` is still 0 (Sylve requires racct)
     zfs create zroot/sylve && zfs set jailed=on zroot/sylve
     sysrc appjail_enable=YES
+    # AppJail 5.3 and older only (no load-kld): load the modules yourself:
+    # sysrc kld_list+="vmm if_bridge cryptodev if_epair nullfs netlink nlsysevent nmdm pf pflog if_wg linux linux64 pty linprocfs linsysfs ctl"
+    # service kld start
     ```
 
     **2.** Save as `.env`:
@@ -71,6 +75,29 @@ Both tags ship Sylve's prebuilt native-FreeBSD binary from a GitHub release; the
         options:
           - from: {{ registry }}/{{ name }}:nightly
           - template: !ENV '${PWD}/sylve-template.conf'
+          # load-kld hook (AppJail > 5.4.0): loads the kernel modules before
+          # the jail starts, replacing the kld_list host-prep step. Inert on
+          # older AppJail releases -- keep the kld_list line there.
+          - label: 'load-kld:1'
+          - label: 'load-kld.load-vmm:vmm'
+          - label: 'load-kld.load-if-bridge:if_bridge'
+          - label: 'load-kld.load-cryptodev:cryptodev'
+          - label: 'load-kld.load-if-epair:if_epair'
+          - label: 'load-kld.load-nullfs:nullfs'
+          - label: 'load-kld.load-netlink:netlink'
+          - label: 'load-kld.load-nlsysevent:nlsysevent'
+          - label: 'load-kld.load-nmdm:nmdm'
+          - label: 'load-kld.load-pf:pf'
+          - label: 'load-kld.load-pflog:pflog'
+          - label: 'load-kld.load-if-wg:if_wg'
+          - label: 'load-kld.load-linux:linux'
+          - label: 'load-kld.load-linux.module:linuxelf'
+          - label: 'load-kld.load-linux64:linux64'
+          - label: 'load-kld.load-linux64.module:linux64elf'
+          - label: 'load-kld.load-pty:pty'
+          - label: 'load-kld.load-linprocfs:linprocfs'
+          - label: 'load-kld.load-linsysfs:linsysfs'
+          - label: 'load-kld.load-ctl:ctl'
           - device: 'include $devfsrules_hide_all'
           - device: 'include $devfsrules_unhide_basic'
           - device: 'include $devfsrules_unhide_login'
