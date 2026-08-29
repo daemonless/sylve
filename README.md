@@ -87,6 +87,9 @@ Both tags ship Sylve's prebuilt native-FreeBSD binary from a GitHub release; the
           - device: "path 'da\\*' unhide"
           - device: "path 'ada\\*' unhide"
           - device: "path 'nda\\*' unhide"
+          - device: "path 'pass\\*' unhide"
+          - device: "path 'xpt\\*' unhide"
+          - device: "path 'nvme\\*' unhide"
         volumes:
           - sylve-data: /var/db/sylve
     volumes:
@@ -119,6 +122,7 @@ Both tags ship Sylve's prebuilt native-FreeBSD binary from a GitHub release; the
     allow.mount.zfs
     # EDIT: the ZFS dataset created during host prep
     zfs.dataset: zroot/sylve
+    zfs.mount_snapshot: 1
     children.max: 100
     allow.socket_af
     allow.sysvipc

@@ -45,6 +45,9 @@ x-daemonless:
             - device: "path 'da\\*' unhide"
             - device: "path 'ada\\*' unhide"
             - device: "path 'nda\\*' unhide"
+            - device: "path 'pass\\*' unhide"
+            - device: "path 'xpt\\*' unhide"
+            - device: "path 'nvme\\*' unhide"
           volumes:
             - sylve-data: /var/db/sylve
       volumes:

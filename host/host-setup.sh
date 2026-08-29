@@ -201,7 +201,8 @@ fi
 if grep -q "\[${RULESET_NAME}\]" /etc/devfs.rules 2>/dev/null; then
 	already 3 "Device access"
 elif step 3 "Device access" "Add devfs ruleset ${RULESET_NAME} to /etc/devfs.rules, exposing to the jail:
-      pf pflog  vmm vmmctl vmm.io  cam/ctl  nmdm* tap* bpf*  da* ada* nda*"; then
+      pf pflog  vmm vmmctl vmm.io  cam/ctl  nmdm* tap* bpf*  da* ada* nda*
+      pass* xpt* nvme* (CAM/NVMe control nodes -- SMART via smartctl)"; then
 	cat >> /etc/devfs.rules <<EOF
 
 [${RULESET_NAME}]
@@ -225,6 +226,9 @@ add path 'cam/ctl' unhide
 add path 'da*' unhide
 add path 'ada*' unhide
 add path 'nda*' unhide
+add path 'pass*' unhide
+add path 'xpt*' unhide
+add path 'nvme*' unhide
 EOF
 	service devfs restart >/dev/null 2>&1 || true
 	echo "    Done." >&2
