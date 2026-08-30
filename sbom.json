@@ -1,11 +1,11 @@
 {
-  "generated": "2026-08-25T22:40:48Z",
+  "generated": "2026-08-30T07:55:48Z",
   "image": "sylve",
   "tags": {
     "latest": {
       "app_version": "0.3.0",
       "arch": "amd64",
-      "generated": "2026-08-25T22:40:01Z",
+      "generated": "2026-08-30T07:54:59Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -84,6 +84,13 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-fetch",
+            "version": "15.1"
+          },
+          {
+            "licenses": [
+              "BSD2CLAUSE"
+            ],
+            "name": "FreeBSD-iscsi",
             "version": "15.1"
           },
           {
@@ -203,7 +210,7 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-openssl-lib",
-            "version": "15.1"
+            "version": "15.1p3"
           },
           {
             "licenses": [
@@ -245,7 +252,7 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-runtime",
-            "version": "15.1p2"
+            "version": "15.1p3"
           },
           {
             "licenses": [
@@ -274,6 +281,13 @@
             ],
             "name": "FreeBSD-utilities",
             "version": "15.1p2"
+          },
+          {
+            "licenses": [
+              "BSD2CLAUSE"
+            ],
+            "name": "FreeBSD-xz",
+            "version": "15.1"
           },
           {
             "licenses": [
@@ -1876,7 +1890,7 @@
       "source": "upstream",
       "summary": {
         "dotnet": 0,
-        "freebsd": 152,
+        "freebsd": 154,
         "go": 125,
         "java": 0,
         "node": 0,
@@ -1884,13 +1898,13 @@
         "python": 30,
         "ruby": 0,
         "rust": 0,
-        "total": 307
+        "total": 309
       }
     },
     "nightly": {
       "app_version": "0.3.0",
       "arch": "amd64",
-      "generated": "2026-08-25T22:39:52Z",
+      "generated": "2026-08-30T07:55:01Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -1969,6 +1983,13 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-fetch",
+            "version": "15.1"
+          },
+          {
+            "licenses": [
+              "BSD2CLAUSE"
+            ],
+            "name": "FreeBSD-iscsi",
             "version": "15.1"
           },
           {
@@ -2088,7 +2109,7 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-openssl-lib",
-            "version": "15.1"
+            "version": "15.1p3"
           },
           {
             "licenses": [
@@ -2130,7 +2151,7 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-runtime",
-            "version": "15.1p2"
+            "version": "15.1p3"
           },
           {
             "licenses": [
@@ -2159,6 +2180,13 @@
             ],
             "name": "FreeBSD-utilities",
             "version": "15.1p2"
+          },
+          {
+            "licenses": [
+              "BSD2CLAUSE"
+            ],
+            "name": "FreeBSD-xz",
+            "version": "15.1"
           },
           {
             "licenses": [
@@ -2982,7 +3010,7 @@
           {
             "name": "github.com/alchemillahq/sylve",
             "purl": "",
-            "version": "v0.0.0-20260825004154-0cda0046d5d3"
+            "version": "v0.0.0-20260829190505-84ef4ca0510b"
           },
           {
             "name": "github.com/armon/go-metrics",
@@ -3597,7 +3625,7 @@
           {
             "name": "stdlib",
             "purl": "",
-            "version": "v1.26.6"
+            "version": "v1.26.7"
           }
         ],
         "java": [],
@@ -3761,7 +3789,7 @@
       "source": "upstream",
       "summary": {
         "dotnet": 0,
-        "freebsd": 152,
+        "freebsd": 154,
         "go": 125,
         "java": 0,
         "node": 0,
@@ -3769,7 +3797,7 @@
         "python": 30,
         "ruby": 0,
         "rust": 0,
-        "total": 307
+        "total": 309
       }
     }
   }
