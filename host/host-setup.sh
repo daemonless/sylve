@@ -11,7 +11,7 @@
 # SYLVE_DATASET=tank/sylve.
 set -eu
 
-# --- preflight: this touches kernel modules, /boot/loader.conf, devfs, and ZFS,
+# --- preflight: this touches kernel modules, rc.conf/loader.conf, devfs, and ZFS,
 #     so it needs root on a FreeBSD 15+ host. Fail early and clearly otherwise. ---
 if [ "$(id -u)" -ne 0 ]; then
 	echo "sylve host-setup: must run as root (it edits loader.conf, devfs, ZFS, ...)." >&2
@@ -126,7 +126,7 @@ if [ "$UNDO" -eq 1 ]; then
 	echo "   Teardown complete." >&2
 	echo "  $SEP" >&2
 	echo "   Left alone (shared, may be used by other containers):" >&2
-	echo "     kernel modules + racct in /boot/loader.conf; pf/podman in /etc/rc.conf" >&2
+	echo "     kernel modules (kld_list) + pf/podman in /etc/rc.conf; racct in /boot/loader.conf" >&2
 	echo >&2
 	echo "   Your ZFS dataset was NOT touched. To delete it and its data:" >&2
 	echo "     zfs destroy -r ${DATASET}" >&2
@@ -142,22 +142,40 @@ echo "   One-time prep so Sylve can manage bhyve, jails, and ZFS" >&2
 echo "   from inside its jail. Already-configured steps are skipped;" >&2
 echo "   the rest ask before running (Enter/y = run, n = skip, -y = all)." >&2
 
-# 1. kernel modules -- load now (no reboot for these) and persist in loader.conf.
-#    "missing" = not loaded, or not yet in /boot/loader.conf.
+# 1. kernel modules -- load now (no reboot for these) and persist in kld_list
+#    (rc.conf). loader.conf is only for what must exist before the kernel is
+#    up; every module here loads fine at runtime, so kld_list is the right
+#    home. The one exception is kern.racct.enable, a boot-only tunable that
+#    has to stay in loader.conf. Modules an older setup already persisted in
+#    loader.conf are honored, not migrated.
 mod_todo=""
+_kld_now="$(sysrc -n kld_list 2>/dev/null || true)"
 for m in $MODULES; do
-	grep -q "^${m}_load=" /boot/loader.conf 2>/dev/null || mod_todo="$mod_todo $m"
+	printf '%s' " $_kld_now " | grep -q " $m " && continue
+	grep -q "^${m}_load=" /boot/loader.conf 2>/dev/null && continue
+	mod_todo="$mod_todo $m"
 done
-grep -q "^kern.racct.enable=" /boot/loader.conf 2>/dev/null || mod_todo="$mod_todo kern.racct.enable"
-if [ -z "$mod_todo" ]; then
+# racct "configured" means the value is 1: either live (boot-only tunable, so
+# a sysctl of 1 proves loader config exists) or already appended below but not
+# yet rebooted. A bare `grep -q "^kern.racct.enable="` would wrongly accept an
+# explicit ="0" line.
+racct_todo=""
+if [ "$(sysctl -n kern.racct.enable 2>/dev/null)" != "1" ] \
+   && ! grep -q '^kern\.racct\.enable="1"' /boot/loader.conf 2>/dev/null; then
+	racct_todo=" kern.racct.enable"
+fi
+if [ -z "$mod_todo" ] && [ -z "$racct_todo" ]; then
 	already 1 "Kernel modules"
-elif step 1 "Kernel modules" "Load into the kernel and persist in /boot/loader.conf:
-     $mod_todo"; then
+elif step 1 "Kernel modules" "Load now and persist -- modules in kld_list (/etc/rc.conf),
+     kern.racct.enable in /boot/loader.conf (boot-only tunable):
+    ${mod_todo}${racct_todo}"; then
 	for m in $MODULES; do
 		kldstat -q -n "$m" 2>/dev/null || kldload "$m" 2>/dev/null || true
-		add_line /boot/loader.conf "${m}_load=\"YES\""
 	done
-	add_line /boot/loader.conf 'kern.racct.enable="1"'
+	[ -n "$mod_todo" ] && sysrc kld_list+="${mod_todo# }" >/dev/null
+	# append, don't add_line: appending ="1" overrides an existing ="0" (last
+	# assignment wins in loader.conf), which add_line's key check would skip.
+	[ -n "$racct_todo" ] && printf '%s\n' 'kern.racct.enable="1"' >> /boot/loader.conf
 	echo "    Done." >&2
 fi
 
@@ -183,7 +201,8 @@ fi
 if grep -q "\[${RULESET_NAME}\]" /etc/devfs.rules 2>/dev/null; then
 	already 3 "Device access"
 elif step 3 "Device access" "Add devfs ruleset ${RULESET_NAME} to /etc/devfs.rules, exposing to the jail:
-      pf pflog  vmm vmmctl vmm.io  cam/ctl  nmdm* tap* bpf*  da* ada* nda*"; then
+      pf pflog  vmm vmmctl vmm.io  cam/ctl  nmdm* tap* bpf*  da* ada* nda*
+      pass* xpt* nvme* (CAM/NVMe control nodes -- SMART via smartctl)"; then
 	cat >> /etc/devfs.rules <<EOF
 
 [${RULESET_NAME}]
@@ -207,6 +226,9 @@ add path 'cam/ctl' unhide
 add path 'da*' unhide
 add path 'ada*' unhide
 add path 'nda*' unhide
+add path 'pass*' unhide
+add path 'xpt*' unhide
+add path 'nvme*' unhide
 EOF
 	service devfs restart >/dev/null 2>&1 || true
 	echo "    Done." >&2
@@ -235,7 +257,7 @@ fi
 #    Bump SYLVE_HOOK_VER whenever the embedded hook below changes: the installed
 #    copy carries the marker, so a newer version replaces an old one instead of
 #    being skipped by a bare existence check.
-SYLVE_HOOK_VER=2
+SYLVE_HOOK_VER=3
 if grep -q "sylve-hook-ver: ${SYLVE_HOOK_VER}\$" "$LIBEXEC/sylve-hook.sh" 2>/dev/null \
    && [ -f "$HOOKS_D/sylve-hook.json" ] && [ -f "$CONF_D/sylve-hooks.conf" ]; then
 	already 5 "OCI hook"
@@ -247,7 +269,7 @@ elif step 5 "OCI hook" "Install/refresh the createRuntime hook + hooks_dir drop-
 
 	cat > "$LIBEXEC/sylve-hook.sh" <<'SYLVE_HOOK_EOF'
 #!/bin/sh
-# sylve-hook-ver: 2
+# sylve-hook-ver: 3
 # OCI createRuntime hook for the daemonless Sylve container. Runs on the HOST
 # right after the jail is created, before Sylve starts. Does the jail wiring
 # ocijail annotations can't:
@@ -293,7 +315,7 @@ done
 # set on the parent (a child can't hold a permission the parent lacks).
 jail -m name="$jail_name" children.max=100 \
 	allow.socket_af=1 allow.sysvipc=1 allow.raw_sockets=1 \
-	allow.reserved_ports=1 allow.set_hostname=1 allow.suser=1 allow.chflags=1
+	allow.reserved_ports=1 allow.set_hostname=1 allow.suser=1 allow.chflags=1 allow.routing=1
 
 zfs set jailed=on "$dataset"
 zfs jail "$jail_name" "$dataset"

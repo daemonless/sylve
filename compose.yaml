@@ -10,7 +10,7 @@ x-daemonless:
   freshports_url: "https://www.freshports.org/sysutils/sylve/"
   user: "root"
   mlock: false
-  community: "Discord:https://chat.sylve.io"
+  community: "Discord:https://discord.gg/Kb9tkhecZT"
 
   docs:
     manual: true
@@ -30,6 +30,7 @@ services:
     container_name: sylve
     hostname: ${SYLVE_HOSTNAME}
     restart: always
+    network_mode: host
 
     annotations:
       org.freebsd.jail.name: "sylve"
@@ -45,6 +46,7 @@ services:
       org.freebsd.jail.enforce_statfs: "1"
       org.freebsd.jail.allow.raw_sockets: "true"
       org.freebsd.jail.allow.chflags: "true"
+      org.freebsd.jail.allow.routing: "true"
       org.freebsd.jail.allow.mount.linprocfs: "true"
       org.freebsd.jail.allow.mount.linsysfs: "true"
       org.freebsd.jail.allow.mount.tmpfs: "true"
@@ -56,7 +58,4 @@ services:
 
     volumes:
       - ${SYLVE_DATA_LOCATION}:/var/db/sylve
-
-    ports:
-      - "8181:8181"
 

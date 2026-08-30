@@ -9,7 +9,7 @@ FROM ghcr.io/daemonless/base:${BASE_VERSION}
 
 ARG FREEBSD_ARCH=amd64
 ARG SYLVE_RELEASE=tip
-ARG PACKAGES="sysutils/smartmontools sysutils/tmux ca_root_nss FreeBSD-zfs FreeBSD-ssh FreeBSD-pf FreeBSD-jail FreeBSD-ctl FreeBSD-dhclient FreeBSD-bhyve FreeBSD-acpi bhyve-firmware swtpm libvirt qemu-tools samba423"
+ARG PACKAGES="sysutils/smartmontools sysutils/tmux ca_root_nss FreeBSD-zfs FreeBSD-ssh FreeBSD-pf FreeBSD-jail FreeBSD-ctl FreeBSD-dhclient FreeBSD-bhyve FreeBSD-acpi bhyve-firmware swtpm libvirt qemu-tools samba423 FreeBSD-iscsi FreeBSD-xz"
 ARG HEALTHCHECK_ENDPOINT="https://localhost:8181/"
 
 ENV HEALTHCHECK_URL="${HEALTHCHECK_ENDPOINT}"
@@ -24,7 +24,6 @@ LABEL org.opencontainers.image.title="Sylve" \
       org.opencontainers.image.vendor="daemonless" \
       org.opencontainers.image.authors="daemonless" \
       io.daemonless.category="Infrastructure" \
-      io.daemonless.port="8181" \
       io.daemonless.volumes="/var/db/sylve" \
       io.daemonless.arch="${FREEBSD_ARCH}" \
       io.daemonless.pkg-source="github" \
@@ -81,7 +80,6 @@ RUN chmod +x /etc/services.d/*/run /etc/cont-init.d/* /usr/local/share/sylve/hos
 ENTRYPOINT ["/usr/local/share/sylve/host/sylve-entrypoint.sh"]
 
 # --- Expose (Injected by Generator) ---
-EXPOSE 8181
 
 # --- Volumes (Injected by Generator) ---
 VOLUME /var/db/sylve
