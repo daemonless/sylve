@@ -1,11 +1,11 @@
 {
-  "generated": "2026-08-30T07:55:48Z",
+  "generated": "2026-09-05T20:48:28Z",
   "image": "sylve",
   "tags": {
     "latest": {
       "app_version": "0.3.0",
       "arch": "amd64",
-      "generated": "2026-08-30T07:54:59Z",
+      "generated": "2026-09-05T20:47:29Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -357,7 +357,7 @@
               "MPL20"
             ],
             "name": "ca_root_nss",
-            "version": "3.127"
+            "version": "3.128"
           },
           {
             "licenses": [
@@ -661,7 +661,7 @@
               "LGPL21"
             ],
             "name": "libssh",
-            "version": "0.12.0_1"
+            "version": "0.12.2"
           },
           {
             "licenses": [
@@ -1904,7 +1904,7 @@
     "nightly": {
       "app_version": "0.3.0",
       "arch": "amd64",
-      "generated": "2026-08-30T07:55:01Z",
+      "generated": "2026-09-05T20:47:20Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -2256,7 +2256,7 @@
               "MPL20"
             ],
             "name": "ca_root_nss",
-            "version": "3.127"
+            "version": "3.128"
           },
           {
             "licenses": [
@@ -2560,7 +2560,7 @@
               "LGPL21"
             ],
             "name": "libssh",
-            "version": "0.12.0_1"
+            "version": "0.12.2"
           },
           {
             "licenses": [
@@ -3010,7 +3010,7 @@
           {
             "name": "github.com/alchemillahq/sylve",
             "purl": "",
-            "version": "v0.0.0-20260829190505-84ef4ca0510b"
+            "version": "v0.0.0-20260905050719-c2986bfdaf08"
           },
           {
             "name": "github.com/armon/go-metrics",
