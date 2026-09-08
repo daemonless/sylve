@@ -2,8 +2,9 @@ ARG BASE_VERSION=15
 FROM ghcr.io/daemonless/base:${BASE_VERSION}
 
 ARG FREEBSD_ARCH=amd64
-ARG SYLVE_RELEASE=tip
-ARG PACKAGES="sysutils/smartmontools sysutils/tmux ca_root_nss FreeBSD-zfs FreeBSD-ssh FreeBSD-pf FreeBSD-jail FreeBSD-ctl FreeBSD-dhclient FreeBSD-bhyve FreeBSD-acpi bhyve-firmware swtpm libvirt qemu-tools samba423 FreeBSD-iscsi FreeBSD-xz"
+ARG UPSTREAM_URL="https://api.github.com/repos/AlchemillaHQ/Sylve/releases/latest"
+ARG UPSTREAM_JQ=".tag_name"
+ARG PACKAGES="sysutils/smartmontools sysutils/tmux ca_root_nss FreeBSD-zfs FreeBSD-ssh FreeBSD-pf FreeBSD-jail FreeBSD-ctl FreeBSD-dhclient FreeBSD-bhyve FreeBSD-acpi swtpm libvirt qemu-tools samba423 FreeBSD-iscsi FreeBSD-xz"
 {%- if ports %}
 ARG HEALTHCHECK_ENDPOINT="https://localhost:{{ ports[0].port }}/"
 {%- else %}
@@ -35,9 +36,14 @@ LABEL org.opencontainers.image.title="{{ title }}" \
       io.daemonless.healthcheck-url="${HEALTHCHECK_ENDPOINT}" \
       io.daemonless.packages="${PACKAGES}"
 
-# Install runtime packages
-RUN pkg update && \
-    pkg install -y ${PACKAGES} && \
+# Install runtime packages. The bhyve bootrom is per-arch: edk2 UEFI on amd64,
+# U-Boot on aarch64 (no edk2-bhyve build exists for arm64).
+RUN case "${FREEBSD_ARCH}" in \
+        aarch64) FIRMWARE=u-boot-bhyve-arm64 ;; \
+        *)       FIRMWARE=bhyve-firmware ;; \
+    esac && \
+    pkg update && \
+    pkg install -y ${PACKAGES} ${FIRMWARE} && \
     pkg clean -ay && \
     rm -rf /var/cache/pkg/* /var/db/pkg/repos/*
 
@@ -46,8 +52,12 @@ RUN pkg update && \
 # rolling `tip` release, with the SvelteKit frontend already go:embed'd. This
 # avoids the Go+npm build entirely -- notably the frontend, whose lightningcss
 # dependency has no freebsd-arm64 package, so a source build can't produce arm64.
-RUN fetch -o /usr/local/sbin/sylve \
-        "https://github.com/AlchemillaHQ/Sylve/releases/download/${SYLVE_RELEASE}/sylve-${FREEBSD_ARCH}" && \
+# Resolve the release tag from UPSTREAM_URL; upstream names the asset arm64.
+RUN BIN_ARCH="${FREEBSD_ARCH}"; \
+    [ "${BIN_ARCH}" = "aarch64" ] && BIN_ARCH=arm64; \
+    SYLVE_RELEASE=$(fetch -qo - "${UPSTREAM_URL}" | jq -r "${UPSTREAM_JQ}") && \
+    fetch -o /usr/local/sbin/sylve \
+        "https://github.com/AlchemillaHQ/Sylve/releases/download/${SYLVE_RELEASE}/sylve-${BIN_ARCH}" && \
     chmod 0755 /usr/local/sbin/sylve
 
 # Create version info and required runtime directories. The version is the one
