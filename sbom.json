@@ -1,11 +1,11 @@
 {
-  "generated": "2026-09-13T09:23:04Z",
+  "generated": "2026-09-13T13:06:01Z",
   "image": "sylve",
   "tags": {
     "latest-amd64": {
       "app_version": "0.3.1",
       "arch": "amd64",
-      "generated": "2026-09-13T09:22:03Z",
+      "generated": "2026-09-13T13:05:13Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -1904,7 +1904,7 @@
     "nightly-amd64": {
       "app_version": "0.3.1-tip.20260912.dcef065",
       "arch": "amd64",
-      "generated": "2026-09-13T09:21:28Z",
+      "generated": "2026-09-13T13:03:21Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
