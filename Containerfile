@@ -10,6 +10,8 @@ FROM ghcr.io/daemonless/base:${BASE_VERSION}
 ARG FREEBSD_ARCH=amd64
 ARG UPSTREAM_URL="https://api.github.com/repos/AlchemillaHQ/Sylve/releases/latest"
 ARG UPSTREAM_JQ=".tag_name"
+# Only consulted for rolling (non-version) release tags -- see version stamping below.
+ARG UPSTREAM_LATEST_URL="https://api.github.com/repos/AlchemillaHQ/Sylve/releases/latest"
 ARG PACKAGES="sysutils/smartmontools sysutils/tmux ca_root_nss FreeBSD-zfs FreeBSD-ssh FreeBSD-pf FreeBSD-jail FreeBSD-ctl FreeBSD-dhclient FreeBSD-bhyve FreeBSD-acpi swtpm libvirt qemu-tools samba423 FreeBSD-iscsi FreeBSD-xz"
 ARG HEALTHCHECK_ENDPOINT="https://localhost:8181/"
 
@@ -50,17 +52,41 @@ RUN case "${FREEBSD_ARCH}" in \
 # avoids the Go+npm build entirely -- notably the frontend, whose lightningcss
 # dependency has no freebsd-arm64 package, so a source build can't produce arm64.
 # Resolve the release tag from UPSTREAM_URL; upstream names the asset arm64.
+# The release JSON is kept for the version stamping below.
 RUN BIN_ARCH="${FREEBSD_ARCH}"; \
     [ "${BIN_ARCH}" = "aarch64" ] && BIN_ARCH=arm64; \
-    SYLVE_RELEASE=$(fetch -qo - "${UPSTREAM_URL}" | jq -r "${UPSTREAM_JQ}") && \
+    fetch -qo /tmp/release.json "${UPSTREAM_URL}" && \
+    SYLVE_RELEASE=$(jq -r "${UPSTREAM_JQ}" /tmp/release.json) && \
     fetch -o /usr/local/sbin/sylve \
         "https://github.com/AlchemillaHQ/Sylve/releases/download/${SYLVE_RELEASE}/sylve-${BIN_ARCH}" && \
     chmod 0755 /usr/local/sbin/sylve
 
-# Create version info and required runtime directories. The version is the one
-# the binary itself reports (const Version in internal/cmd/root.go, e.g. 0.3.0),
-# parsed out of `sylve --version`; falls back to "nightly" if that ever fails.
+# Create version info and required runtime directories.
+#
+# At a tagged release the binary is authoritative: `sylve --version` prints
+# const Version from internal/cmd/root.go (e.g. 0.3.1).
+#
+# The rolling `tip` release is not. Upstream only bumps that const when they
+# cut a release, so every tip build in between reports the *previous* version
+# (0.0.1 at the moment -- they reset it after v0.3.1), which would keep
+# overwriting one `<ver>-nightly` registry tag with unrelated builds. For a
+# rolling tag we stamp `<last release>-<tag>.<YYYYMMDD>.<short sha>` instead,
+# e.g. 0.3.1-tip.20260912.dcef065. Date and sha come from the release object
+# itself, not from build time, so both architectures compute the same string
+# -- dbuild skips the versioned manifest when they disagree.
 RUN SYLVE_VERSION="$(/usr/local/sbin/sylve --version 2>&1 | grep -oE 'v?[0-9]+\.[0-9]+\.[0-9]+' | tail -1 | tr -d v)" && \
+    REL_TAG="$(jq -r '.tag_name // ""' /tmp/release.json)" && \
+    case "${REL_TAG}" in \
+        v[0-9]*|[0-9]*) ;; \
+        *) MARK="$(printf '%s' "${REL_TAG:-tip}" | tr -cd 'A-Za-z0-9')"; \
+           REL_DATE="$(jq -r '(.created_at // .published_at // "") | gsub("[^0-9]";"") | .[0:8]' /tmp/release.json)"; \
+           REL_SHA="$(jq -r '.target_commitish // ""' /tmp/release.json | grep -oE '^[0-9a-f]{7,40}$' | cut -c1-7)"; \
+           BASE_VER="$(fetch -qo - "${UPSTREAM_LATEST_URL}" | jq -r '.tag_name // ""' | tr -d v)"; \
+           : "${BASE_VER:=${SYLVE_VERSION}}"; \
+           : "${BASE_VER:=0.0.0}"; \
+           SYLVE_VERSION="${BASE_VER}-${MARK}${REL_DATE:+.${REL_DATE}}${REL_SHA:+.${REL_SHA}}" ;; \
+    esac && \
+    rm -f /tmp/release.json && \
     : "${SYLVE_VERSION:=nightly}" && \
     mkdir -p /usr/local/share/sylve && \
     printf "Version: %s\nPackageAuthor: [daemonless](https://github.com/daemonless/daemonless)\n" "$SYLVE_VERSION" > /usr/local/share/sylve/version_info && \
