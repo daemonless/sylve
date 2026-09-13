@@ -24,3 +24,6 @@ cit:
   health: /
   ready: "Sylve"
   puid: false
+
+fjord:
+  exclude: true
