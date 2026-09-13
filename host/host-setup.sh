@@ -195,13 +195,29 @@ elif step 2 "System services" "Add to /etc/rc.conf (podman auto-starts the conta
 fi
 
 # 3. devfs ruleset -- every device Sylve's init/features touch. Each missing
-#    entry crash-loops a different init step: pf/pflog (firewall/libvirtd),
-#    cam/ctl (iSCSI), vmm*/vmmctl (bhyve), nmdm* (VM consoles), da/ada/nda
-#    (disks), tap*/bpf* (networking).
+#    entry breaks a different feature: cam/ctl (iSCSI), vmm*/vmmctl (bhyve),
+#    nmdm* (VM consoles), da/ada/nda (disks), tap*/bpf* (networking).
+#    pf/pflog are deliberately NOT exposed: this jail shares the host's
+#    network stack, so /dev/pf would be the HOST's firewall. A non-VNET jail
+#    may flush it but not load rules into it, and Sylve applies its firewall
+#    with `pfctl -F all` + `pfctl -f` -- which left the host with an empty
+#    ruleset on every Sylve start. Without the device Sylve runs fine (its
+#    firewall page is inert, as it effectively always was here). Note
+#    $devfsrules_jail_vnet is NOT included: its one rule is `path pf unhide`.
 if grep -q "\[${RULESET_NAME}\]" /etc/devfs.rules 2>/dev/null; then
-	already 3 "Device access"
+	if awk -v n="[${RULESET_NAME}]" '$0==n{f=1;next} /^\[/{f=0} f && /add (path pf(log)? unhide|include \$devfsrules_jail_vnet)/{x=1} END{exit !x}' /etc/devfs.rules; then
+		if step 3 "Device access" "Ruleset ${RULESET_NAME} exposes pf (pf/pflog entries or the jail_vnet include):
+      remove them from /etc/devfs.rules -- Sylve flushed the host's firewall through /dev/pf on every start."; then
+			awk -v n="[${RULESET_NAME}]" '$0==n{f=1} /^\[/&&$0!=n{f=0} !(f && /add (path pf(log)? unhide|include \$devfsrules_jail_vnet)/)' \
+				/etc/devfs.rules > /etc/devfs.rules.new && mv /etc/devfs.rules.new /etc/devfs.rules
+			service devfs restart >/dev/null 2>&1 || true
+			echo "    Done. Restart Sylve to pick up the new ruleset." >&2
+		fi
+	else
+		already 3 "Device access"
+	fi
 elif step 3 "Device access" "Add devfs ruleset ${RULESET_NAME} to /etc/devfs.rules, exposing to the jail:
-      pf pflog  vmm vmmctl vmm.io  cam/ctl  nmdm* tap* bpf*  da* ada* nda*
+      vmm vmmctl vmm.io  cam/ctl  nmdm* tap* bpf*  da* ada* nda*
       pass* xpt* nvme* (CAM/NVMe control nodes -- SMART via smartctl)"; then
 	cat >> /etc/devfs.rules <<EOF
 
@@ -210,9 +226,6 @@ add include \$devfsrules_hide_all
 add include \$devfsrules_unhide_basic
 add include \$devfsrules_unhide_login
 add include \$devfsrules_jail
-add include \$devfsrules_jail_vnet
-add path pf unhide
-add path pflog unhide
 add path 'bpf*' unhide
 add path 'vmmctl' unhide
 add path 'vmm' unhide

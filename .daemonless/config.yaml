@@ -20,6 +20,7 @@ build:
 cit:
   mode: health
   port: 8181
+  https: true
   health: /
   ready: "Sylve"
   puid: false

@@ -72,7 +72,9 @@ Both tags ship Sylve's prebuilt native-FreeBSD binary from a GitHub release; the
     ```yaml { data-zip-bundle="sylve-appjail" data-zip-filename="appjail-director.yml" }
     options:
       # Equivalent to 'network_host: host'.
-      # Use it only if you don't have problems with Sylve managing your pf(4).
+      # If you do, also drop `path pf unhide`/`path pflog unhide` from the
+      # template below: on a shared stack /dev/pf is the HOST's firewall, which
+      # Sylve flushes on start (a non-VNET jail can flush pf but not load it).
       #- alias:
       #- ip4_inherit:
       #
@@ -253,7 +255,10 @@ Access Sylve at: **https://your-host:8181** (first login: `admin` / `admin`)
 | `8181` | sylve | Web UI (HTTPS) |
 
 !!! note "Network Mode"
-    The Podman path shares the host network (`network_mode: host`) so Sylve manages the host's interfaces, firewall, and VMs directly. The AppJail path defaults to its own vnet + NAT to avoid clobbering the host's `pf(4)` rules -- uncomment `alias`/`ip4_inherit` in `appjail-director.yml` for host networking instead.
+    The Podman path shares the host network (`network_mode: host`) so Sylve manages the host's interfaces and VMs directly. The AppJail path defaults to its own vnet + NAT -- uncomment `alias`/`ip4_inherit` in `appjail-director.yml` for host networking instead.
+
+!!! note "Firewall"
+    Sylve applies its firewall with `pfctl -F all` + `pfctl -f`, replacing the whole ruleset. In its own VNET (the AppJail default) that is Sylve's own `pf(4)`. On the host's network stack `/dev/pf` would be the *host's* firewall: a non-VNET jail may flush it but cannot load rules into it, so Sylve would wipe the host's NAT/rdr anchors on every start. The Podman host-setup therefore does not expose `pf`/`pflog` to the jail; Sylve runs normally and its firewall page is inert there. Ran host-setup before this change? Re-run it -- it strips the entries from your ruleset.
 
 ## FreeBSD-Specific Notes
 
