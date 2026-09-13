@@ -1,11 +1,11 @@
 {
-  "generated": "2026-09-08T22:18:28Z",
+  "generated": "2026-09-13T09:23:04Z",
   "image": "sylve",
   "tags": {
     "latest-amd64": {
       "app_version": "0.3.1",
       "arch": "amd64",
-      "generated": "2026-09-08T22:17:27Z",
+      "generated": "2026-09-13T09:22:03Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -357,7 +357,7 @@
               "MPL20"
             ],
             "name": "ca_root_nss",
-            "version": "3.128"
+            "version": "3.129"
           },
           {
             "licenses": [
@@ -1902,9 +1902,9 @@
       }
     },
     "nightly-amd64": {
-      "app_version": "0.3.1",
+      "app_version": "0.3.1-tip.20260912.dcef065",
       "arch": "amd64",
-      "generated": "2026-09-08T22:17:14Z",
+      "generated": "2026-09-13T09:21:28Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -2256,7 +2256,7 @@
               "MPL20"
             ],
             "name": "ca_root_nss",
-            "version": "3.128"
+            "version": "3.129"
           },
           {
             "licenses": [
@@ -3010,7 +3010,7 @@
           {
             "name": "github.com/alchemillahq/sylve",
             "purl": "",
-            "version": "v0.0.0-20260907125613-44698cec216d"
+            "version": "v0.0.0-20260912185426-37b107ee9ed5"
           },
           {
             "name": "github.com/armon/go-metrics",
@@ -3625,7 +3625,7 @@
           {
             "name": "stdlib",
             "purl": "",
-            "version": "v1.26.7"
+            "version": "v1.26.8"
           }
         ],
         "java": [],
