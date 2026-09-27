@@ -31,7 +31,8 @@ LABEL org.opencontainers.image.title="Sylve" \
       io.daemonless.arch="${FREEBSD_ARCH}" \
       io.daemonless.pkg-source="github" \
       io.daemonless.upstream-mode="github" \
-      io.daemonless.upstream-url="https://github.com/AlchemillaHQ/Sylve" \
+      io.daemonless.upstream-url="${UPSTREAM_URL}" \
+      io.daemonless.upstream-jq="${UPSTREAM_JQ}" \
       io.daemonless.healthcheck-url="${HEALTHCHECK_ENDPOINT}" \
       io.daemonless.packages="${PACKAGES}"
 
