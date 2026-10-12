@@ -1,11 +1,11 @@
 {
-  "generated": "2026-10-09T16:36:22Z",
+  "generated": "2026-10-12T23:55:47Z",
   "image": "sylve",
   "tags": {
     "latest-aarch64": {
       "app_version": "0.3.1",
       "arch": "aarch64",
-      "generated": "2026-10-09T16:34:57Z",
+      "generated": "2026-10-12T23:54:28Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -1895,9 +1895,9 @@
       }
     },
     "nightly-aarch64": {
-      "app_version": "0.3.1-tip.20261009.dcef065",
+      "app_version": "0.3.1-tip.20261012.bd64c74",
       "arch": "aarch64",
-      "generated": "2026-10-09T16:35:02Z",
+      "generated": "2026-10-12T23:54:35Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -3001,7 +3001,7 @@
           {
             "name": "github.com/alchemillahq/sylve",
             "purl": "",
-            "version": "v0.0.0-20261009151946-a8284f65c8be"
+            "version": "v0.0.0-20261012134044-bd64c74d28dc"
           },
           {
             "name": "github.com/alecthomas/atomic",
@@ -3506,7 +3506,7 @@
           {
             "name": "github.com/pion/dtls/v3",
             "purl": "",
-            "version": "v3.0.3"
+            "version": "v3.1.10"
           },
           {
             "name": "github.com/pion/ice/v4",
@@ -3521,7 +3521,7 @@
           {
             "name": "github.com/pion/logging",
             "purl": "",
-            "version": "v0.2.3"
+            "version": "v0.2.4"
           },
           {
             "name": "github.com/pion/mdns/v2",
@@ -3561,12 +3561,22 @@
           {
             "name": "github.com/pion/stun/v3",
             "purl": "",
-            "version": "v3.0.0"
+            "version": "v3.1.7"
           },
           {
             "name": "github.com/pion/transport/v3",
             "purl": "",
             "version": "v3.0.7"
+          },
+          {
+            "name": "github.com/pion/transport/v4",
+            "purl": "",
+            "version": "v4.1.0"
+          },
+          {
+            "name": "github.com/pion/transport/v5",
+            "purl": "",
+            "version": "v5.0.0"
           },
           {
             "name": "github.com/pion/turn/v4",
@@ -3661,7 +3671,7 @@
           {
             "name": "github.com/wlynxg/anet",
             "purl": "",
-            "version": "v0.0.3"
+            "version": "v0.0.5"
           },
           {
             "name": "github.com/x448/float16",
@@ -3936,14 +3946,14 @@
       "summary": {
         "dotnet": 0,
         "freebsd": 153,
-        "go": 157,
+        "go": 159,
         "java": 0,
         "node": 0,
         "php": 0,
         "python": 30,
         "ruby": 0,
         "rust": 0,
-        "total": 340
+        "total": 342
       }
     }
   }
