@@ -62,33 +62,29 @@ RUN BIN_ARCH="${FREEBSD_ARCH}"; \
         "https://github.com/AlchemillaHQ/Sylve/releases/download/${SYLVE_RELEASE}/sylve-${BIN_ARCH}" && \
     chmod 0755 /usr/local/sbin/sylve
 
-# Create version info and required runtime directories.
-#
-# At a tagged release the binary is authoritative: `sylve --version` prints
-# const Version from internal/cmd/root.go (e.g. 0.3.1).
-#
-# The rolling `tip` release is not. Upstream only bumps that const when they
-# cut a release, so every tip build in between reports the *previous* version
-# (0.0.1 at the moment -- they reset it after v0.3.1), which would keep
-# overwriting one `<ver>-nightly` registry tag with unrelated builds. For a
-# rolling tag we stamp `<last release>-<tag>.<YYYYMMDD>.<short sha>` instead,
-# e.g. 0.3.1-tip.20260912.dcef065. Date and sha come from the release object
-# itself, not from build time, so both architectures compute the same string
-# -- dbuild skips the versioned manifest when they disagree.
-RUN SYLVE_VERSION="$(/usr/local/sbin/sylve --version 2>&1 | grep -oE 'v?[0-9]+\.[0-9]+\.[0-9]+' | tail -1 | tr -d v)" && \
+# Version stamp. A tagged release is just its version. The rolling `tip`
+# release keeps the same version between releases, so it gets
+# <ver>-tip.<date>.<sha>, with the sha from the binary itself: the release
+# object's target_commitish goes stale when upstream moves the tag.
+RUN VER_JSON="$(/usr/local/sbin/sylve --version --json 2>/dev/null || true)" && \
+    SYLVE_VERSION="$(printf '%s' "${VER_JSON}" | jq -r '.version // ""' 2>/dev/null | tr -d v)" && \
+    BIN_SHA="$(printf '%s' "${VER_JSON}" | jq -r '.commit // ""' 2>/dev/null | grep -oE '^[0-9a-f]{7,40}$' | cut -c1-7)" && \
+    : "${SYLVE_VERSION:=$(/usr/local/sbin/sylve --version 2>&1 | grep -oE 'v?[0-9]+\.[0-9]+\.[0-9]+' | tail -1 | tr -d v)}" && \
     REL_TAG="$(jq -r '.tag_name // ""' /tmp/release.json)" && \
     case "${REL_TAG}" in \
         v[0-9]*|[0-9]*) ;; \
         *) MARK="$(printf '%s' "${REL_TAG:-tip}" | tr -cd 'A-Za-z0-9')"; \
            REL_DATE="$(jq -r '(.created_at // .published_at // "") | gsub("[^0-9]";"") | .[0:8]' /tmp/release.json)"; \
-           REL_SHA="$(jq -r '.target_commitish // ""' /tmp/release.json | grep -oE '^[0-9a-f]{7,40}$' | cut -c1-7)"; \
-           BASE_VER="$(fetch -qo - "${UPSTREAM_LATEST_URL}" | jq -r '.tag_name // ""' | tr -d v)"; \
-           : "${BASE_VER:=${SYLVE_VERSION}}"; \
-           : "${BASE_VER:=0.0.0}"; \
-           SYLVE_VERSION="${BASE_VER}-${MARK}${REL_DATE:+.${REL_DATE}}${REL_SHA:+.${REL_SHA}}" ;; \
+           REL_SHA="${BIN_SHA:-$(jq -r '.target_commitish // ""' /tmp/release.json | grep -oE '^[0-9a-f]{7,40}$' | cut -c1-7)}"; \
+           case "${SYLVE_VERSION}" in \
+               ""|0.0.*) SYLVE_VERSION="$(fetch -qo - "${UPSTREAM_LATEST_URL}" | jq -r '.tag_name // ""' | tr -d v)" ;; \
+           esac; \
+           : "${SYLVE_VERSION:=0.0.0}"; \
+           SYLVE_VERSION="${SYLVE_VERSION}-${MARK}${REL_DATE:+.${REL_DATE}}${REL_SHA:+.${REL_SHA}}" ;; \
     esac && \
     rm -f /tmp/release.json && \
     : "${SYLVE_VERSION:=nightly}" && \
+    echo "version: ${SYLVE_VERSION}" && \
     mkdir -p /usr/local/share/sylve && \
     printf "Version: %s\nPackageAuthor: [daemonless](https://github.com/daemonless/daemonless)\n" "$SYLVE_VERSION" > /usr/local/share/sylve/version_info && \
     mkdir -m 0755 -p /app /var/db/sylve /var/log/sylve && \
