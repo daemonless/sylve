@@ -1,11 +1,11 @@
 {
-  "generated": "2026-10-09T14:53:14Z",
+  "generated": "2026-10-12T23:13:35Z",
   "image": "sylve",
   "tags": {
     "latest-amd64": {
       "app_version": "0.3.1",
       "arch": "amd64",
-      "generated": "2026-10-09T14:49:37Z",
+      "generated": "2026-10-12T23:11:30Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -357,7 +357,7 @@
               "MPL20"
             ],
             "name": "ca_root_nss",
-            "version": "3.130"
+            "version": "3.131"
           },
           {
             "licenses": [
@@ -385,7 +385,7 @@
               "GPLv2+"
             ],
             "name": "dbus-glib",
-            "version": "0.114"
+            "version": "0.116"
           },
           {
             "licenses": [
@@ -406,7 +406,7 @@
               "BSD3CLAUSE"
             ],
             "name": "edk2-bhyve",
-            "version": "g202508_2"
+            "version": "g202508_3"
           },
           {
             "licenses": [
@@ -420,7 +420,7 @@
               "MIT"
             ],
             "name": "expat",
-            "version": "2.8.2"
+            "version": "2.8.4"
           },
           {
             "licenses": [
@@ -453,7 +453,7 @@
               "LGPL20"
             ],
             "name": "glib",
-            "version": "2.86.4,2"
+            "version": "2.88.3,2"
           },
           {
             "licenses": [
@@ -567,7 +567,7 @@
               "BSD2CLAUSE"
             ],
             "name": "libarchive",
-            "version": "3.8.7,1"
+            "version": "3.8.8,1"
           },
           {
             "licenses": [
@@ -588,7 +588,7 @@
               "MIT"
             ],
             "name": "libffi",
-            "version": "3.6.0"
+            "version": "3.8.0"
           },
           {
             "licenses": [
@@ -596,7 +596,7 @@
               "GPLv2+"
             ],
             "name": "libgcrypt",
-            "version": "1.12.2"
+            "version": "1.12.4"
           },
           {
             "licenses": [
@@ -640,21 +640,21 @@
               "MIT"
             ],
             "name": "libnghttp2",
-            "version": "1.69.0"
+            "version": "1.70.0"
           },
           {
             "licenses": [
               "MIT"
             ],
             "name": "libpsl",
-            "version": "0.22.0"
+            "version": "0.23.3"
           },
           {
             "licenses": [
               "BSD3CLAUSE"
             ],
             "name": "libslirp",
-            "version": "4.9.3"
+            "version": "4.9.5"
           },
           {
             "licenses": [
@@ -713,7 +713,7 @@
               "LGPL3"
             ],
             "name": "libvirt",
-            "version": "12.5.0"
+            "version": "12.7.0_1"
           },
           {
             "licenses": [
@@ -727,7 +727,7 @@
               "MIT"
             ],
             "name": "libxml2",
-            "version": "2.15.3"
+            "version": "2.15.4"
           },
           {
             "licenses": [
@@ -763,35 +763,35 @@
               "OPENLDAP"
             ],
             "name": "openldap26-client",
-            "version": "2.6.13"
+            "version": "2.6.15_1"
           },
           {
             "licenses": [
               "BSD3CLAUSE"
             ],
             "name": "p11-kit",
-            "version": "0.26.2"
+            "version": "0.26.5_1"
           },
           {
             "licenses": [
               "BSD3CLAUSE"
             ],
             "name": "pcre2",
-            "version": "10.47_1"
+            "version": "10.49"
           },
           {
             "licenses": [
               "BSD2CLAUSE"
             ],
             "name": "pkg",
-            "version": "2.7.5"
+            "version": "2.8.4"
           },
           {
             "licenses": [
               "MIT"
             ],
             "name": "popt",
-            "version": "1.19_1"
+            "version": "1.19,2"
           },
           {
             "licenses": [
@@ -805,7 +805,7 @@
               "MIT"
             ],
             "name": "py312-anyio",
-            "version": "4.14.1"
+            "version": "4.15.1"
           },
           {
             "licenses": [
@@ -827,14 +827,14 @@
               "MPL20"
             ],
             "name": "py312-certifi",
-            "version": "2026.6.17"
+            "version": "2026.7.22"
           },
           {
             "licenses": [
               "MIT"
             ],
             "name": "py312-cffi",
-            "version": "2.0.0"
+            "version": "2.1.1"
           },
           {
             "licenses": [
@@ -842,7 +842,7 @@
               "APACHE20"
             ],
             "name": "py312-cryptography",
-            "version": "48.0.1,1"
+            "version": "50.0.1,1"
           },
           {
             "licenses": [
@@ -863,7 +863,7 @@
               "MIT"
             ],
             "name": "py312-h2",
-            "version": "4.3.0"
+            "version": "4.4.1"
           },
           {
             "licenses": [
@@ -898,14 +898,14 @@
               "BSD3CLAUSE"
             ],
             "name": "py312-idna",
-            "version": "3.18"
+            "version": "3.20"
           },
           {
             "licenses": [
               "BSD3CLAUSE"
             ],
             "name": "py312-markdown",
-            "version": "3.10.2"
+            "version": "3.10.3"
           },
           {
             "licenses": [
@@ -921,14 +921,14 @@
               "APACHE20"
             ],
             "name": "py312-packaging",
-            "version": "26.2"
+            "version": "26.3"
           },
           {
             "licenses": [
               "BSD3CLAUSE"
             ],
             "name": "py312-pycparser",
-            "version": "2.23"
+            "version": "3.0"
           },
           {
             "licenses": [
@@ -942,7 +942,7 @@
               "APACHE20"
             ],
             "name": "py312-pyopenssl",
-            "version": "26.2.0,1"
+            "version": "26.4.0,1"
           },
           {
             "licenses": [
@@ -986,42 +986,42 @@
               "APACHE20"
             ],
             "name": "py312-trio",
-            "version": "0.33.0"
+            "version": "0.34.0"
           },
           {
             "licenses": [
               "MIT"
             ],
             "name": "py312-truststore",
-            "version": "0.10.4"
+            "version": "0.10.4_1"
           },
           {
             "licenses": [
               "PSFL"
             ],
             "name": "py312-typing-extensions",
-            "version": "4.15.0"
+            "version": "4.16.0"
           },
           {
             "licenses": [
               "PSFL"
             ],
             "name": "python312",
-            "version": "3.12.14"
+            "version": "3.12.14_1"
           },
           {
             "licenses": [
               "GPLv2"
             ],
             "name": "qemu-tools",
-            "version": "11.0.2"
+            "version": "11.1.2_1"
           },
           {
             "licenses": [
               "GPLv3"
             ],
             "name": "readline",
-            "version": "8.3.3"
+            "version": "8.3.6"
           },
           {
             "licenses": [
@@ -1035,7 +1035,7 @@
               "GPLv3+"
             ],
             "name": "samba423",
-            "version": "4.23.8_1"
+            "version": "4.23.11_3"
           },
           {
             "licenses": [
@@ -1062,8 +1062,8 @@
             "licenses": [
               "LGPL3"
             ],
-            "name": "talloc243",
-            "version": "2.4.3"
+            "name": "talloc244",
+            "version": "2.4.4"
           },
           {
             "licenses": [
@@ -1077,14 +1077,14 @@
               "LGPL3"
             ],
             "name": "tevent017",
-            "version": "0.17.1"
+            "version": "0.17.1_1"
           },
           {
             "licenses": [
               "ISCL"
             ],
             "name": "tmux",
-            "version": "3.7b"
+            "version": "3.7c"
           },
           {
             "licenses": [
@@ -1741,7 +1741,7 @@
           {
             "name": "anyio",
             "purl": "",
-            "version": "4.14.1"
+            "version": "4.15.1"
           },
           {
             "name": "async-generator",
@@ -1756,17 +1756,17 @@
           {
             "name": "certifi",
             "purl": "",
-            "version": "2026.6.17"
+            "version": "2026.7.22"
           },
           {
             "name": "cffi",
             "purl": "",
-            "version": "2.0.0"
+            "version": "2.1.1"
           },
           {
             "name": "cryptography",
             "purl": "",
-            "version": "48.0.1"
+            "version": "50.0.1"
           },
           {
             "name": "dnspython",
@@ -1786,7 +1786,7 @@
           {
             "name": "h2",
             "purl": "",
-            "version": "4.3.0"
+            "version": "4.4.1"
           },
           {
             "name": "hpack",
@@ -1811,12 +1811,12 @@
           {
             "name": "idna",
             "purl": "",
-            "version": "3.18"
+            "version": "3.20"
           },
           {
             "name": "markdown",
             "purl": "",
-            "version": "3.10.2"
+            "version": "3.10.3"
           },
           {
             "name": "outcome",
@@ -1826,12 +1826,12 @@
           {
             "name": "packaging",
             "purl": "",
-            "version": "26.2"
+            "version": "26.3"
           },
           {
             "name": "pycparser",
             "purl": "",
-            "version": "2.23"
+            "version": "3.0"
           },
           {
             "name": "pylsqpack",
@@ -1841,7 +1841,7 @@
           {
             "name": "pyopenssl",
             "purl": "",
-            "version": "26.2.0"
+            "version": "26.4.0"
           },
           {
             "name": "service-identity",
@@ -1871,7 +1871,7 @@
           {
             "name": "trio",
             "purl": "",
-            "version": "0.33.0"
+            "version": "0.34.0"
           },
           {
             "name": "truststore",
@@ -1881,7 +1881,7 @@
           {
             "name": "typing_extensions",
             "purl": "",
-            "version": "4.15.0"
+            "version": "4.16.0"
           }
         ],
         "ruby": [],
@@ -1902,9 +1902,9 @@
       }
     },
     "nightly-amd64": {
-      "app_version": "0.3.1-tip.20261009.dcef065",
+      "app_version": "0.3.1-tip.20261012.bd64c74",
       "arch": "amd64",
-      "generated": "2026-10-09T14:48:01Z",
+      "generated": "2026-10-12T23:12:44Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -2256,7 +2256,7 @@
               "MPL20"
             ],
             "name": "ca_root_nss",
-            "version": "3.130"
+            "version": "3.131"
           },
           {
             "licenses": [
@@ -2284,7 +2284,7 @@
               "GPLv2+"
             ],
             "name": "dbus-glib",
-            "version": "0.114"
+            "version": "0.116"
           },
           {
             "licenses": [
@@ -2305,7 +2305,7 @@
               "BSD3CLAUSE"
             ],
             "name": "edk2-bhyve",
-            "version": "g202508_2"
+            "version": "g202508_3"
           },
           {
             "licenses": [
@@ -2319,7 +2319,7 @@
               "MIT"
             ],
             "name": "expat",
-            "version": "2.8.2"
+            "version": "2.8.4"
           },
           {
             "licenses": [
@@ -2352,7 +2352,7 @@
               "LGPL20"
             ],
             "name": "glib",
-            "version": "2.86.4,2"
+            "version": "2.88.3,2"
           },
           {
             "licenses": [
@@ -2466,7 +2466,7 @@
               "BSD2CLAUSE"
             ],
             "name": "libarchive",
-            "version": "3.8.7,1"
+            "version": "3.8.8,1"
           },
           {
             "licenses": [
@@ -2487,7 +2487,7 @@
               "MIT"
             ],
             "name": "libffi",
-            "version": "3.6.0"
+            "version": "3.8.0"
           },
           {
             "licenses": [
@@ -2495,7 +2495,7 @@
               "GPLv2+"
             ],
             "name": "libgcrypt",
-            "version": "1.12.2"
+            "version": "1.12.4"
           },
           {
             "licenses": [
@@ -2539,21 +2539,21 @@
               "MIT"
             ],
             "name": "libnghttp2",
-            "version": "1.69.0"
+            "version": "1.70.0"
           },
           {
             "licenses": [
               "MIT"
             ],
             "name": "libpsl",
-            "version": "0.22.0"
+            "version": "0.23.3"
           },
           {
             "licenses": [
               "BSD3CLAUSE"
             ],
             "name": "libslirp",
-            "version": "4.9.3"
+            "version": "4.9.5"
           },
           {
             "licenses": [
@@ -2612,7 +2612,7 @@
               "LGPL3"
             ],
             "name": "libvirt",
-            "version": "12.5.0"
+            "version": "12.7.0_1"
           },
           {
             "licenses": [
@@ -2626,7 +2626,7 @@
               "MIT"
             ],
             "name": "libxml2",
-            "version": "2.15.3"
+            "version": "2.15.4"
           },
           {
             "licenses": [
@@ -2662,35 +2662,35 @@
               "OPENLDAP"
             ],
             "name": "openldap26-client",
-            "version": "2.6.13"
+            "version": "2.6.15_1"
           },
           {
             "licenses": [
               "BSD3CLAUSE"
             ],
             "name": "p11-kit",
-            "version": "0.26.2"
+            "version": "0.26.5_1"
           },
           {
             "licenses": [
               "BSD3CLAUSE"
             ],
             "name": "pcre2",
-            "version": "10.47_1"
+            "version": "10.49"
           },
           {
             "licenses": [
               "BSD2CLAUSE"
             ],
             "name": "pkg",
-            "version": "2.7.5"
+            "version": "2.8.4"
           },
           {
             "licenses": [
               "MIT"
             ],
             "name": "popt",
-            "version": "1.19_1"
+            "version": "1.19,2"
           },
           {
             "licenses": [
@@ -2704,7 +2704,7 @@
               "MIT"
             ],
             "name": "py312-anyio",
-            "version": "4.14.1"
+            "version": "4.15.1"
           },
           {
             "licenses": [
@@ -2726,14 +2726,14 @@
               "MPL20"
             ],
             "name": "py312-certifi",
-            "version": "2026.6.17"
+            "version": "2026.7.22"
           },
           {
             "licenses": [
               "MIT"
             ],
             "name": "py312-cffi",
-            "version": "2.0.0"
+            "version": "2.1.1"
           },
           {
             "licenses": [
@@ -2741,7 +2741,7 @@
               "APACHE20"
             ],
             "name": "py312-cryptography",
-            "version": "48.0.1,1"
+            "version": "50.0.1,1"
           },
           {
             "licenses": [
@@ -2762,7 +2762,7 @@
               "MIT"
             ],
             "name": "py312-h2",
-            "version": "4.3.0"
+            "version": "4.4.1"
           },
           {
             "licenses": [
@@ -2797,14 +2797,14 @@
               "BSD3CLAUSE"
             ],
             "name": "py312-idna",
-            "version": "3.18"
+            "version": "3.20"
           },
           {
             "licenses": [
               "BSD3CLAUSE"
             ],
             "name": "py312-markdown",
-            "version": "3.10.2"
+            "version": "3.10.3"
           },
           {
             "licenses": [
@@ -2820,14 +2820,14 @@
               "APACHE20"
             ],
             "name": "py312-packaging",
-            "version": "26.2"
+            "version": "26.3"
           },
           {
             "licenses": [
               "BSD3CLAUSE"
             ],
             "name": "py312-pycparser",
-            "version": "2.23"
+            "version": "3.0"
           },
           {
             "licenses": [
@@ -2841,7 +2841,7 @@
               "APACHE20"
             ],
             "name": "py312-pyopenssl",
-            "version": "26.2.0,1"
+            "version": "26.4.0,1"
           },
           {
             "licenses": [
@@ -2885,42 +2885,42 @@
               "APACHE20"
             ],
             "name": "py312-trio",
-            "version": "0.33.0"
+            "version": "0.34.0"
           },
           {
             "licenses": [
               "MIT"
             ],
             "name": "py312-truststore",
-            "version": "0.10.4"
+            "version": "0.10.4_1"
           },
           {
             "licenses": [
               "PSFL"
             ],
             "name": "py312-typing-extensions",
-            "version": "4.15.0"
+            "version": "4.16.0"
           },
           {
             "licenses": [
               "PSFL"
             ],
             "name": "python312",
-            "version": "3.12.14"
+            "version": "3.12.14_1"
           },
           {
             "licenses": [
               "GPLv2"
             ],
             "name": "qemu-tools",
-            "version": "11.0.2"
+            "version": "11.1.2_1"
           },
           {
             "licenses": [
               "GPLv3"
             ],
             "name": "readline",
-            "version": "8.3.3"
+            "version": "8.3.6"
           },
           {
             "licenses": [
@@ -2934,7 +2934,7 @@
               "GPLv3+"
             ],
             "name": "samba423",
-            "version": "4.23.8_1"
+            "version": "4.23.11_3"
           },
           {
             "licenses": [
@@ -2961,8 +2961,8 @@
             "licenses": [
               "LGPL3"
             ],
-            "name": "talloc243",
-            "version": "2.4.3"
+            "name": "talloc244",
+            "version": "2.4.4"
           },
           {
             "licenses": [
@@ -2976,14 +2976,14 @@
               "LGPL3"
             ],
             "name": "tevent017",
-            "version": "0.17.1"
+            "version": "0.17.1_1"
           },
           {
             "licenses": [
               "ISCL"
             ],
             "name": "tmux",
-            "version": "3.7b"
+            "version": "3.7c"
           },
           {
             "licenses": [
@@ -3015,7 +3015,7 @@
           {
             "name": "github.com/alchemillahq/sylve",
             "purl": "",
-            "version": "v0.0.0-20261009130748-06572aeb780c"
+            "version": "v0.0.0-20261012134044-bd64c74d28dc"
           },
           {
             "name": "github.com/alecthomas/atomic",
@@ -3525,7 +3525,7 @@
           {
             "name": "github.com/pion/dtls/v3",
             "purl": "",
-            "version": "v3.0.3"
+            "version": "v3.1.10"
           },
           {
             "name": "github.com/pion/ice/v4",
@@ -3540,7 +3540,7 @@
           {
             "name": "github.com/pion/logging",
             "purl": "",
-            "version": "v0.2.3"
+            "version": "v0.2.4"
           },
           {
             "name": "github.com/pion/mdns/v2",
@@ -3580,12 +3580,22 @@
           {
             "name": "github.com/pion/stun/v3",
             "purl": "",
-            "version": "v3.0.0"
+            "version": "v3.1.7"
           },
           {
             "name": "github.com/pion/transport/v3",
             "purl": "",
             "version": "v3.0.7"
+          },
+          {
+            "name": "github.com/pion/transport/v4",
+            "purl": "",
+            "version": "v4.1.0"
+          },
+          {
+            "name": "github.com/pion/transport/v5",
+            "purl": "",
+            "version": "v5.0.0"
           },
           {
             "name": "github.com/pion/turn/v4",
@@ -3680,7 +3690,7 @@
           {
             "name": "github.com/wlynxg/anet",
             "purl": "",
-            "version": "v0.0.3"
+            "version": "v0.0.5"
           },
           {
             "name": "github.com/x448/float16",
@@ -3805,7 +3815,7 @@
           {
             "name": "anyio",
             "purl": "",
-            "version": "4.14.1"
+            "version": "4.15.1"
           },
           {
             "name": "async-generator",
@@ -3820,17 +3830,17 @@
           {
             "name": "certifi",
             "purl": "",
-            "version": "2026.6.17"
+            "version": "2026.7.22"
           },
           {
             "name": "cffi",
             "purl": "",
-            "version": "2.0.0"
+            "version": "2.1.1"
           },
           {
             "name": "cryptography",
             "purl": "",
-            "version": "48.0.1"
+            "version": "50.0.1"
           },
           {
             "name": "dnspython",
@@ -3850,7 +3860,7 @@
           {
             "name": "h2",
             "purl": "",
-            "version": "4.3.0"
+            "version": "4.4.1"
           },
           {
             "name": "hpack",
@@ -3875,12 +3885,12 @@
           {
             "name": "idna",
             "purl": "",
-            "version": "3.18"
+            "version": "3.20"
           },
           {
             "name": "markdown",
             "purl": "",
-            "version": "3.10.2"
+            "version": "3.10.3"
           },
           {
             "name": "outcome",
@@ -3890,12 +3900,12 @@
           {
             "name": "packaging",
             "purl": "",
-            "version": "26.2"
+            "version": "26.3"
           },
           {
             "name": "pycparser",
             "purl": "",
-            "version": "2.23"
+            "version": "3.0"
           },
           {
             "name": "pylsqpack",
@@ -3905,7 +3915,7 @@
           {
             "name": "pyopenssl",
             "purl": "",
-            "version": "26.2.0"
+            "version": "26.4.0"
           },
           {
             "name": "service-identity",
@@ -3935,7 +3945,7 @@
           {
             "name": "trio",
             "purl": "",
-            "version": "0.33.0"
+            "version": "0.34.0"
           },
           {
             "name": "truststore",
@@ -3945,7 +3955,7 @@
           {
             "name": "typing_extensions",
             "purl": "",
-            "version": "4.15.0"
+            "version": "4.16.0"
           }
         ],
         "ruby": [],
@@ -3955,14 +3965,14 @@
       "summary": {
         "dotnet": 0,
         "freebsd": 154,
-        "go": 158,
+        "go": 160,
         "java": 0,
         "node": 0,
         "php": 0,
         "python": 30,
         "ruby": 0,
         "rust": 0,
-        "total": 342
+        "total": 344
       }
     }
   }
