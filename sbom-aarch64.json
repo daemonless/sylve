@@ -1,11 +1,11 @@
 {
-  "generated": "2026-10-12T23:55:47Z",
+  "generated": "2026-10-23T18:16:10Z",
   "image": "sylve",
   "tags": {
     "latest-aarch64": {
       "app_version": "0.3.1",
       "arch": "aarch64",
-      "generated": "2026-10-12T23:54:28Z",
+      "generated": "2026-10-23T18:14:46Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -28,7 +28,7 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-bhyve",
-            "version": "15.1p4"
+            "version": "15.1p5"
           },
           {
             "licenses": [
@@ -237,13 +237,6 @@
             "licenses": [
               "BSD2CLAUSE"
             ],
-            "name": "FreeBSD-rc",
-            "version": "15.1"
-          },
-          {
-            "licenses": [
-              "BSD2CLAUSE"
-            ],
             "name": "FreeBSD-resolvconf",
             "version": "15.1"
           },
@@ -252,7 +245,7 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-runtime",
-            "version": "15.1p4"
+            "version": "15.1p5"
           },
           {
             "licenses": [
@@ -322,7 +315,7 @@
               "PD"
             ],
             "name": "FreeBSD-zoneinfo",
-            "version": "15.1p4"
+            "version": "15.1p5"
           },
           {
             "licenses": [
@@ -350,7 +343,7 @@
               "MPL20"
             ],
             "name": "ca_root_nss",
-            "version": "3.130"
+            "version": "3.131"
           },
           {
             "licenses": [
@@ -386,13 +379,6 @@
             ],
             "name": "dnsmasq",
             "version": "2.93,1"
-          },
-          {
-            "licenses": [
-              "ISCL"
-            ],
-            "name": "execline",
-            "version": "2.9.8.1"
           },
           {
             "licenses": [
@@ -993,14 +979,14 @@
               "PSFL"
             ],
             "name": "python312",
-            "version": "3.12.14_1"
+            "version": "3.12.15"
           },
           {
             "licenses": [
               "GPLv2"
             ],
             "name": "qemu-tools",
-            "version": "11.1.2"
+            "version": "11.1.2_1"
           },
           {
             "licenses": [
@@ -1011,24 +997,10 @@
           },
           {
             "licenses": [
-              "ISCL"
-            ],
-            "name": "s6",
-            "version": "2.14.0.1"
-          },
-          {
-            "licenses": [
               "GPLv3+"
             ],
             "name": "samba423",
             "version": "4.23.11_3"
-          },
-          {
-            "licenses": [
-              "ISCL"
-            ],
-            "name": "skalibs",
-            "version": "2.14.5.1"
           },
           {
             "licenses": [
@@ -1883,7 +1855,7 @@
       "source": "upstream",
       "summary": {
         "dotnet": 0,
-        "freebsd": 153,
+        "freebsd": 149,
         "go": 125,
         "java": 0,
         "node": 0,
@@ -1891,13 +1863,13 @@
         "python": 30,
         "ruby": 0,
         "rust": 0,
-        "total": 308
+        "total": 304
       }
     },
     "nightly-aarch64": {
-      "app_version": "0.3.1-tip.20261012.bd64c74",
+      "app_version": "0.3.1-tip.20261019.a401a68",
       "arch": "aarch64",
-      "generated": "2026-10-12T23:54:35Z",
+      "generated": "2026-10-23T18:14:52Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -1920,7 +1892,7 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-bhyve",
-            "version": "15.1p4"
+            "version": "15.1p5"
           },
           {
             "licenses": [
@@ -2129,13 +2101,6 @@
             "licenses": [
               "BSD2CLAUSE"
             ],
-            "name": "FreeBSD-rc",
-            "version": "15.1"
-          },
-          {
-            "licenses": [
-              "BSD2CLAUSE"
-            ],
             "name": "FreeBSD-resolvconf",
             "version": "15.1"
           },
@@ -2144,7 +2109,7 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-runtime",
-            "version": "15.1p4"
+            "version": "15.1p5"
           },
           {
             "licenses": [
@@ -2214,7 +2179,7 @@
               "PD"
             ],
             "name": "FreeBSD-zoneinfo",
-            "version": "15.1p4"
+            "version": "15.1p5"
           },
           {
             "licenses": [
@@ -2242,7 +2207,7 @@
               "MPL20"
             ],
             "name": "ca_root_nss",
-            "version": "3.130"
+            "version": "3.131"
           },
           {
             "licenses": [
@@ -2278,13 +2243,6 @@
             ],
             "name": "dnsmasq",
             "version": "2.93,1"
-          },
-          {
-            "licenses": [
-              "ISCL"
-            ],
-            "name": "execline",
-            "version": "2.9.8.1"
           },
           {
             "licenses": [
@@ -2885,14 +2843,14 @@
               "PSFL"
             ],
             "name": "python312",
-            "version": "3.12.14_1"
+            "version": "3.12.15"
           },
           {
             "licenses": [
               "GPLv2"
             ],
             "name": "qemu-tools",
-            "version": "11.1.2"
+            "version": "11.1.2_1"
           },
           {
             "licenses": [
@@ -2903,24 +2861,10 @@
           },
           {
             "licenses": [
-              "ISCL"
-            ],
-            "name": "s6",
-            "version": "2.14.0.1"
-          },
-          {
-            "licenses": [
               "GPLv3+"
             ],
             "name": "samba423",
             "version": "4.23.11_3"
-          },
-          {
-            "licenses": [
-              "ISCL"
-            ],
-            "name": "skalibs",
-            "version": "2.14.5.1"
           },
           {
             "licenses": [
@@ -3001,7 +2945,7 @@
           {
             "name": "github.com/alchemillahq/sylve",
             "purl": "",
-            "version": "v0.0.0-20261012134044-bd64c74d28dc"
+            "version": "v0.0.0-20261019092417-a401a6809005"
           },
           {
             "name": "github.com/alecthomas/atomic",
@@ -3781,7 +3725,7 @@
           {
             "name": "stdlib",
             "purl": "",
-            "version": "v1.26.8"
+            "version": "v1.26.9"
           }
         ],
         "java": [],
@@ -3945,7 +3889,7 @@
       "source": "upstream",
       "summary": {
         "dotnet": 0,
-        "freebsd": 153,
+        "freebsd": 149,
         "go": 159,
         "java": 0,
         "node": 0,
@@ -3953,7 +3897,7 @@
         "python": 30,
         "ruby": 0,
         "rust": 0,
-        "total": 342
+        "total": 338
       }
     }
   }
