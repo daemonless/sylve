@@ -5,7 +5,7 @@
 # --------------------------------------------------------------------------
 
 ARG BASE_VERSION=15
-FROM ghcr.io/daemonless/base:${BASE_VERSION}
+FROM ghcr.io/daemonless/base-rcd:${BASE_VERSION}
 
 ARG FREEBSD_ARCH=amd64
 ARG UPSTREAM_URL="https://api.github.com/repos/AlchemillaHQ/Sylve/releases/latest"
@@ -92,6 +92,7 @@ RUN VER_JSON="$(/usr/local/sbin/sylve --version --json 2>/dev/null || true)" && 
 
 # Copy service definition and init scripts
 COPY root/ /
+RUN chmod +x /daemonless/libexec/* /daemonless/init.d/*
 
 # Host-side setup materials. host-setup.sh is a self-contained host-prep script
 # printed by `podman run <image> host-setup` (see the entrypoint wrapper below);
@@ -106,7 +107,7 @@ RUN awk 'BEGIN{skip=0} /^x-daemonless:/{skip=1} /^services:/{skip=0} !skip' \
         /tmp/compose.yaml > /usr/local/share/sylve/compose.yaml && rm /tmp/compose.yaml
 
 # Make scripts executable
-RUN chmod +x /etc/services.d/*/run /etc/cont-init.d/* /usr/local/share/sylve/host/*.sh 2>/dev/null || true
+RUN chmod +x /usr/local/share/sylve/host/*.sh
 
 # Entrypoint wrapper: `podman run <image> host-setup` prints the host-prep
 # script, `... compose` prints the compose.yaml; everything else boots Sylve.
