@@ -1,11 +1,11 @@
 {
-  "generated": "2026-10-24T10:19:57Z",
+  "generated": "2026-11-04T14:29:39Z",
   "image": "sylve",
   "tags": {
     "latest-aarch64": {
       "app_version": "0.3.1",
       "arch": "aarch64",
-      "generated": "2026-10-24T10:18:44Z",
+      "generated": "2026-11-04T14:28:00Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -245,7 +245,7 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-runtime",
-            "version": "15.1p5"
+            "version": "15.1p6"
           },
           {
             "licenses": [
@@ -336,21 +336,21 @@
               "MIT"
             ],
             "name": "brotli",
-            "version": "1.2.0,1"
+            "version": "1.2.1,1"
           },
           {
             "licenses": [
               "MPL20"
             ],
             "name": "ca_root_nss",
-            "version": "3.131"
+            "version": "3.132"
           },
           {
             "licenses": [
               "MIT"
             ],
             "name": "curl",
-            "version": "8.22.0"
+            "version": "8.23.0"
           },
           {
             "licenses": [
@@ -511,7 +511,7 @@
               "MIT"
             ],
             "name": "libX11",
-            "version": "1.8.13_1,1"
+            "version": "1.8.14,1"
           },
           {
             "licenses": [
@@ -1867,9 +1867,9 @@
       }
     },
     "nightly-aarch64": {
-      "app_version": "0.3.1-tip.20261019.a401a68",
+      "app_version": "0.3.1-tip.20261104.b7a2f53",
       "arch": "aarch64",
-      "generated": "2026-10-24T10:18:49Z",
+      "generated": "2026-11-04T14:28:06Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -2109,7 +2109,7 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-runtime",
-            "version": "15.1p5"
+            "version": "15.1p6"
           },
           {
             "licenses": [
@@ -2200,21 +2200,21 @@
               "MIT"
             ],
             "name": "brotli",
-            "version": "1.2.0,1"
+            "version": "1.2.1,1"
           },
           {
             "licenses": [
               "MPL20"
             ],
             "name": "ca_root_nss",
-            "version": "3.131"
+            "version": "3.132"
           },
           {
             "licenses": [
               "MIT"
             ],
             "name": "curl",
-            "version": "8.22.0"
+            "version": "8.23.0"
           },
           {
             "licenses": [
@@ -2375,7 +2375,7 @@
               "MIT"
             ],
             "name": "libX11",
-            "version": "1.8.13_1,1"
+            "version": "1.8.14,1"
           },
           {
             "licenses": [
@@ -2940,12 +2940,12 @@
           {
             "name": "github.com/alchemillahq/gzfs",
             "purl": "",
-            "version": "v0.0.0-20260817151231-5b9cad3526ff"
+            "version": "v0.0.0-20261025152323-c0bf3add0a07"
           },
           {
             "name": "github.com/alchemillahq/sylve",
             "purl": "",
-            "version": "v0.0.0-20261019092417-a401a6809005"
+            "version": "v0.0.0-20261104130404-b7a2f5311a99"
           },
           {
             "name": "github.com/alecthomas/atomic",
@@ -3041,6 +3041,11 @@
             "name": "github.com/aymanbagabas/go-osc52/v2",
             "purl": "",
             "version": "v2.0.1"
+          },
+          {
+            "name": "github.com/aymerick/douceur",
+            "purl": "",
+            "version": "v0.2.0"
           },
           {
             "name": "github.com/bahlo/generic-list-go",
@@ -3288,6 +3293,11 @@
             "version": "v1.6.0"
           },
           {
+            "name": "github.com/gorilla/css",
+            "purl": "",
+            "version": "v1.0.1"
+          },
+          {
             "name": "github.com/gorilla/websocket",
             "purl": "",
             "version": "v1.5.3"
@@ -3391,6 +3401,11 @@
             "name": "github.com/mattn/go-sqlite3",
             "purl": "",
             "version": "v1.14.32"
+          },
+          {
+            "name": "github.com/microcosm-cc/bluemonday",
+            "purl": "",
+            "version": "v1.0.27"
           },
           {
             "name": "github.com/miekg/dns",
@@ -3628,6 +3643,11 @@
             "version": "v0.0.0-20220910002029-abceb7e1c41e"
           },
           {
+            "name": "github.com/yuin/goldmark",
+            "purl": "",
+            "version": "v1.8.7"
+          },
+          {
             "name": "go.etcd.io/bbolt",
             "purl": "",
             "version": "v1.4.3"
@@ -3661,6 +3681,11 @@
             "name": "golang.org/x/exp",
             "purl": "",
             "version": "v0.0.0-20251113190631-e25ba8c21ef6"
+          },
+          {
+            "name": "golang.org/x/mod",
+            "purl": "",
+            "version": "v0.36.0"
           },
           {
             "name": "golang.org/x/net",
@@ -3725,7 +3750,7 @@
           {
             "name": "stdlib",
             "purl": "",
-            "version": "v1.26.9"
+            "version": "v1.27.3"
           }
         ],
         "java": [],
@@ -3890,14 +3915,14 @@
       "summary": {
         "dotnet": 0,
         "freebsd": 149,
-        "go": 159,
+        "go": 164,
         "java": 0,
         "node": 0,
         "php": 0,
         "python": 30,
         "ruby": 0,
         "rust": 0,
-        "total": 338
+        "total": 343
       }
     }
   }
