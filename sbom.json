@@ -1,11 +1,11 @@
 {
-  "generated": "2026-10-24T08:50:47Z",
+  "generated": "2026-11-04T14:20:15Z",
   "image": "sylve",
   "tags": {
     "latest-amd64": {
       "app_version": "0.3.1",
       "arch": "amd64",
-      "generated": "2026-10-24T08:45:46Z",
+      "generated": "2026-11-04T14:19:07Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -245,7 +245,7 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-runtime",
-            "version": "15.1p5"
+            "version": "15.1p6"
           },
           {
             "licenses": [
@@ -343,14 +343,14 @@
               "MIT"
             ],
             "name": "brotli",
-            "version": "1.2.0,1"
+            "version": "1.2.1,1"
           },
           {
             "licenses": [
               "MPL20"
             ],
             "name": "ca_root_nss",
-            "version": "3.131.1"
+            "version": "3.132"
           },
           {
             "licenses": [
@@ -406,7 +406,7 @@
               "MIT"
             ],
             "name": "expat",
-            "version": "2.8.4"
+            "version": "2.9.0"
           },
           {
             "licenses": [
@@ -699,7 +699,7 @@
               "LGPL3"
             ],
             "name": "libvirt",
-            "version": "12.7.0_1"
+            "version": "12.8.0"
           },
           {
             "licenses": [
@@ -1014,7 +1014,7 @@
               "GPLv3+"
             ],
             "name": "samba423",
-            "version": "4.23.11_3"
+            "version": "4.23.13"
           },
           {
             "licenses": [
@@ -1874,9 +1874,9 @@
       }
     },
     "nightly-amd64": {
-      "app_version": "0.3.1-tip.20261019.a401a68",
+      "app_version": "0.3.1-tip.20261104.b7a2f53",
       "arch": "amd64",
-      "generated": "2026-10-24T08:49:30Z",
+      "generated": "2026-11-04T14:19:32Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -2116,7 +2116,7 @@
               "BSD2CLAUSE"
             ],
             "name": "FreeBSD-runtime",
-            "version": "15.1p5"
+            "version": "15.1p6"
           },
           {
             "licenses": [
@@ -2214,14 +2214,14 @@
               "MIT"
             ],
             "name": "brotli",
-            "version": "1.2.0,1"
+            "version": "1.2.1,1"
           },
           {
             "licenses": [
               "MPL20"
             ],
             "name": "ca_root_nss",
-            "version": "3.131.1"
+            "version": "3.132"
           },
           {
             "licenses": [
@@ -2277,7 +2277,7 @@
               "MIT"
             ],
             "name": "expat",
-            "version": "2.8.4"
+            "version": "2.9.0"
           },
           {
             "licenses": [
@@ -2570,7 +2570,7 @@
               "LGPL3"
             ],
             "name": "libvirt",
-            "version": "12.7.0_1"
+            "version": "12.8.0"
           },
           {
             "licenses": [
@@ -2885,7 +2885,7 @@
               "GPLv3+"
             ],
             "name": "samba423",
-            "version": "4.23.11_3"
+            "version": "4.23.13"
           },
           {
             "licenses": [
@@ -2954,12 +2954,12 @@
           {
             "name": "github.com/alchemillahq/gzfs",
             "purl": "",
-            "version": "v0.0.0-20260817151231-5b9cad3526ff"
+            "version": "v0.0.0-20261025152323-c0bf3add0a07"
           },
           {
             "name": "github.com/alchemillahq/sylve",
             "purl": "",
-            "version": "v0.0.0-20261019092417-a401a6809005"
+            "version": "v0.0.0-20261104130404-b7a2f5311a99"
           },
           {
             "name": "github.com/alecthomas/atomic",
@@ -3060,6 +3060,11 @@
             "name": "github.com/aymanbagabas/go-osc52/v2",
             "purl": "",
             "version": "v2.0.1"
+          },
+          {
+            "name": "github.com/aymerick/douceur",
+            "purl": "",
+            "version": "v0.2.0"
           },
           {
             "name": "github.com/bahlo/generic-list-go",
@@ -3307,6 +3312,11 @@
             "version": "v1.6.0"
           },
           {
+            "name": "github.com/gorilla/css",
+            "purl": "",
+            "version": "v1.0.1"
+          },
+          {
             "name": "github.com/gorilla/websocket",
             "purl": "",
             "version": "v1.5.3"
@@ -3410,6 +3420,11 @@
             "name": "github.com/mattn/go-sqlite3",
             "purl": "",
             "version": "v1.14.32"
+          },
+          {
+            "name": "github.com/microcosm-cc/bluemonday",
+            "purl": "",
+            "version": "v1.0.27"
           },
           {
             "name": "github.com/miekg/dns",
@@ -3647,6 +3662,11 @@
             "version": "v0.0.0-20220910002029-abceb7e1c41e"
           },
           {
+            "name": "github.com/yuin/goldmark",
+            "purl": "",
+            "version": "v1.8.7"
+          },
+          {
             "name": "go.etcd.io/bbolt",
             "purl": "",
             "version": "v1.4.3"
@@ -3680,6 +3700,11 @@
             "name": "golang.org/x/exp",
             "purl": "",
             "version": "v0.0.0-20251113190631-e25ba8c21ef6"
+          },
+          {
+            "name": "golang.org/x/mod",
+            "purl": "",
+            "version": "v0.36.0"
           },
           {
             "name": "golang.org/x/net",
@@ -3744,7 +3769,7 @@
           {
             "name": "stdlib",
             "purl": "",
-            "version": "v1.26.9"
+            "version": "v1.27.3"
           }
         ],
         "java": [],
@@ -3909,14 +3934,14 @@
       "summary": {
         "dotnet": 0,
         "freebsd": 150,
-        "go": 160,
+        "go": 165,
         "java": 0,
         "node": 0,
         "php": 0,
         "python": 30,
         "ruby": 0,
         "rust": 0,
-        "total": 340
+        "total": 345
       }
     }
   }
