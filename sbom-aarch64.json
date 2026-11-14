@@ -1,11 +1,11 @@
 {
-  "generated": "2026-11-04T14:29:39Z",
+  "generated": "2026-11-14T00:44:16Z",
   "image": "sylve",
   "tags": {
     "latest-aarch64": {
       "app_version": "0.3.1",
       "arch": "aarch64",
-      "generated": "2026-11-04T14:28:00Z",
+      "generated": "2026-11-14T00:41:53Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -385,7 +385,7 @@
               "MIT"
             ],
             "name": "expat",
-            "version": "2.8.4"
+            "version": "2.9.0"
           },
           {
             "licenses": [
@@ -685,7 +685,7 @@
               "LGPL3"
             ],
             "name": "libvirt",
-            "version": "12.7.0_1"
+            "version": "12.8.0"
           },
           {
             "licenses": [
@@ -1000,7 +1000,7 @@
               "GPLv3+"
             ],
             "name": "samba423",
-            "version": "4.23.11_3"
+            "version": "4.23.13"
           },
           {
             "licenses": [
@@ -1867,9 +1867,9 @@
       }
     },
     "nightly-aarch64": {
-      "app_version": "0.3.1-tip.20261104.b7a2f53",
+      "app_version": "0.3.1-tip.20261111.0204cb0",
       "arch": "aarch64",
-      "generated": "2026-11-04T14:28:06Z",
+      "generated": "2026-11-14T00:41:59Z",
       "packages": {
         "dotnet": [],
         "freebsd": [
@@ -2249,7 +2249,7 @@
               "MIT"
             ],
             "name": "expat",
-            "version": "2.8.4"
+            "version": "2.9.0"
           },
           {
             "licenses": [
@@ -2549,7 +2549,7 @@
               "LGPL3"
             ],
             "name": "libvirt",
-            "version": "12.7.0_1"
+            "version": "12.8.0"
           },
           {
             "licenses": [
@@ -2864,7 +2864,7 @@
               "GPLv3+"
             ],
             "name": "samba423",
-            "version": "4.23.11_3"
+            "version": "4.23.13"
           },
           {
             "licenses": [
@@ -2945,7 +2945,7 @@
           {
             "name": "github.com/alchemillahq/sylve",
             "purl": "",
-            "version": "v0.0.0-20261104130404-b7a2f5311a99"
+            "version": "v0.0.0-20261111142442-0204cb0218e3"
           },
           {
             "name": "github.com/alecthomas/atomic",
@@ -3063,6 +3063,11 @@
             "version": "v0.4.1-0.20221220213129-8932b999621d"
           },
           {
+            "name": "github.com/beorn7/perks",
+            "purl": "",
+            "version": "v1.0.1"
+          },
+          {
             "name": "github.com/boltdb/bolt",
             "purl": "",
             "version": "v1.3.1"
@@ -3138,6 +3143,11 @@
             "version": "v2.5.0"
           },
           {
+            "name": "github.com/coreos/go-oidc/v3",
+            "purl": "",
+            "version": "v3.21.0"
+          },
+          {
             "name": "github.com/creack/pty",
             "purl": "",
             "version": "v1.1.24"
@@ -3206,6 +3216,11 @@
             "name": "github.com/gin-gonic/gin",
             "purl": "",
             "version": "v1.11.0"
+          },
+          {
+            "name": "github.com/go-jose/go-jose/v4",
+            "purl": "",
+            "version": "v4.1.4"
           },
           {
             "name": "github.com/go-logr/logr",
@@ -3448,6 +3463,11 @@
             "version": "v0.1.0"
           },
           {
+            "name": "github.com/munnerz/goautoneg",
+            "purl": "",
+            "version": "v0.0.0-20191010083416-a7dc8b61c822"
+          },
+          {
             "name": "github.com/natefinch/lumberjack",
             "purl": "",
             "version": "v2.0.0+incompatible"
@@ -3551,6 +3571,26 @@
             "name": "github.com/pkg/errors",
             "purl": "",
             "version": "v0.9.1"
+          },
+          {
+            "name": "github.com/prometheus/client_golang",
+            "purl": "",
+            "version": "v1.23.2"
+          },
+          {
+            "name": "github.com/prometheus/client_model",
+            "purl": "",
+            "version": "v0.6.2"
+          },
+          {
+            "name": "github.com/prometheus/common",
+            "purl": "",
+            "version": "v0.66.1"
+          },
+          {
+            "name": "github.com/prometheus/procfs",
+            "purl": "",
+            "version": "v0.16.1"
           },
           {
             "name": "github.com/protolambda/ctxlock",
@@ -3673,6 +3713,11 @@
             "version": "v1.38.0"
           },
           {
+            "name": "go.yaml.in/yaml/v2",
+            "purl": "",
+            "version": "v2.4.2"
+          },
+          {
             "name": "golang.org/x/crypto",
             "purl": "",
             "version": "v0.53.0"
@@ -3691,6 +3736,11 @@
             "name": "golang.org/x/net",
             "purl": "",
             "version": "v0.55.0"
+          },
+          {
+            "name": "golang.org/x/oauth2",
+            "purl": "",
+            "version": "v0.36.0"
           },
           {
             "name": "golang.org/x/sync",
@@ -3915,14 +3965,14 @@
       "summary": {
         "dotnet": 0,
         "freebsd": 149,
-        "go": 164,
+        "go": 174,
         "java": 0,
         "node": 0,
         "php": 0,
         "python": 30,
         "ruby": 0,
         "rust": 0,
-        "total": 343
+        "total": 353
       }
     }
   }
